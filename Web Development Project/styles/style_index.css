@@ -1,0 +1,80 @@
+* {
+	margin: 0;
+	font-family: sans-serif;
+}
+
+#banniere {
+	height: 100px;
+	line-height: 100px;
+	text-align: center;
+	border: 1px solid black;
+	background-color: white;
+}
+
+#titre_principal {
+	font-size: 40px;
+	color: black;
+}
+
+section {
+	width: 98%;
+	margin: auto;
+	margin-top: 10px;
+}
+
+section h1, h2 {
+	margin: 10px 0;
+	text-align: center;
+	color: black;
+}
+
+section h1 {
+	padding: 5px;
+	font-size: 40px;
+	border: 1px solid black;
+	background-color: white;
+}
+
+section article {
+	width: 100%;
+	height: 200px;
+	margin: 10px 0;
+	border: 1px solid black;
+}
+
+section article h2 {
+	margin: auto 0;
+	line-height: 200px;
+	font-size: 40px;
+	background-color: white;
+}
+
+section article h2:hover {
+	color: white;
+	background-color: black;
+	transition-duration: 1s;
+}
+
+section article form {
+	text-align: center;
+}
+
+footer {
+	width: 98%;
+	margin: auto;
+	padding: 10px 0;
+	text-align: center;
+	margin-bottom: 10px;
+	color: black;
+	border: 1px solid black;
+	background-color: white;
+}
+
+footer h1 {
+	font-size: 16px;
+}
+
+footer a {
+	color: black;
+	text-decoration: none;
+}
