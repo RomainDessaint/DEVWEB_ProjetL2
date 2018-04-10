@@ -31,14 +31,13 @@ function csvFile(){
       //Dans un  premier temps,on crypte le mot de passe en utilisant la fonction password_hash
       $crypted = password_hash($password, PASSWORD_BCRYPT);
 
-      $Content = "Name, Password\n";
       //on crée une variable content qui va contenir le nom et le mot de passe
-      $Content .= "$name, $crypted\n";
+      $content = "$name, $crypted\n";
       //on ouvre le fichier private.csv en mode écriture
       $file = fopen("private.csv","w");
 
 
-      $temp.= $Content;
+      $temp .= $content;
       //on ajoute le nom et le mot de passe dans le fichier csv sous la forme  name, Password
       // test, 514D5FEA548&/*S15
       fputcsv($file, array($temp));
