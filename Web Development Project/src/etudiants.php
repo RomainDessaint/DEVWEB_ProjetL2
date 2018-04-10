@@ -6,6 +6,7 @@ echo display_header("Espace étudiants", "../styles/style_logpages.css");
 ?>
 
 <section>
+	<p> bite </p>
 	<h1> Espace étudiant </h1>
 	<article>
 		<h2> Connectez-vous : </h2>
