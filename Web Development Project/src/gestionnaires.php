@@ -7,11 +7,11 @@ echo display_header("Espace gestionnaires", "../styles/style_logpages.css");
 <section>
 	<h1> ESPACE GESTIONNAIRES </h1>
 	<article>
-		<h2> Créer une session : </h2>
+		<h2> Connectez-vous : </h2>
 		<?php
-		echo formCreateLogin();
+		echo formLoginAdministrator();
 		if (isset($_POST['submit'])) {
-			echo createLogin();
+			echo loginAdministrator();
 		}
 		?>
 	</article>

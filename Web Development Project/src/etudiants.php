@@ -9,9 +9,9 @@ echo display_header("Espace étudiants", "../styles/style_logpages.css");
 	<article>
 		<h2> Connectez-vous : </h2>
 		<?php
-		echo formLogin();
+		echo formLoginStudent();
 		if (isset($_POST['submit'])) {
-			echo login();
+			echo loginStudent();
 		}
 		?>
 	</article>

@@ -1,5 +1,7 @@
 <?php
-function formLogin() {
+
+//Affichage d'un formulaire de connexion pour un étudiant
+function formLoginStudent() {
     $retour = '<form action="#" method = "post">';
     $retour .= '<table>';
     $retour .= '<tr>';
@@ -16,7 +18,8 @@ function formLogin() {
     return $retour;
 }
 
-function login() {
+//Authentification d'un étudiant
+function loginStudent() {
     $lignes = file("../ressources/login_etudiant.csv");
     $i=0;
     if (isset($_POST['submit'])) {
@@ -31,6 +34,48 @@ function login() {
                 return $temp;
             }
             else {
+                $temp = "Le nom ou le mot de passe est incorrect !";
+                $i++;
+            }
+        }
+        return $temp;
+    }
+}
+
+//Affichage d'un formulaire de connexion pour un administrateur
+function formLoginAdministrator() {
+    $retour = '<form action="#" method = "post">';
+    $retour .= '<table>';
+    $retour .= '<tr>';
+    $retour .= '<td> <label> Identifiant : </label> </td>';
+    $retour .= '<td> <input type="text" name="id" value=""> </td>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td> <label> Mot de passe : </label> </td>';
+    $retour .= '<td> <input type="password" name="password" value=""> </td>';
+    $retour .= '</tr>';
+    $retour .= '</table>';
+    $retour .= '<input id="bouton" type="submit" value="Valider" name="submit">';
+    $retour .= '</form>';
+
+    return $retour;
+}
+
+//Authentification d'un administrateur
+function loginAdministrator() {
+    $lignes = file("../ressources/login_administrator.csv");
+    $i=0;
+    if (isset($_POST['submit'])) {
+        $id = $_POST['id'];
+        $password = $_POST['password'];
+
+        foreach ($lignes as $ligne[]) {
+            $content = explode(',', $ligne[$i]);
+
+            if($content[3] == $id && $content[4] == $password) {
+                $temp = "Connexion effectuée !";
+                return $temp;
+            }
+            else {
                 $temp = "L'identifiant ou le mot de passe est incorrect !";
                 $i++;
             }
@@ -39,10 +84,18 @@ function login() {
     }
 }
 
+//Affichage d'un formulaire de création de session
 function formCreateLogin() {
     $retour = '<form action="#" method = "post">';
     $retour .= '<table>';
     $retour .= '<tr>';
+    $retour .= '<td> <label> Session : </label> </td>';
+    $retour .= '<td> <select name="session">';
+    $retour .= '<option value ="teacher"> Professeur </option>';
+    $retour .= '<option value ="teacher"> Secrétaire </option>';
+    $retour .= '<option value ="administrator"> Gestionnaire </option>';
+    $retour .= '</select> </td>';
+    $retour .= '</tr> <tr>';
     $retour .= '<td> <label> Prénom : </label> </td>';
     $retour .= '<td> <input type="text" name="firstname" value=""> </td>';
     $retour .= '</tr> <tr>';
@@ -74,14 +127,15 @@ function formCreateLogin() {
 function createLogin() {
     $temp = '';
     if(isset($_POST['submit'])) {
-        $firstname= $_POST['firstname'];
+        $session = $_POST['session'];
+        $firstname = $_POST['firstname'];
         $name = $_POST['name'];
         $gender = $_POST['gender'];
         $id = $_POST['id'];
         $password1 = $_POST['password1'];
         $password2 = $_POST['password2'];
 
-        if($firstname=='' || $name=='' || $gender=='' || $id=='' || $password1=='' || $password2=='' ) {
+        if($session =='' || $firstname=='' || $name=='' || $gender=='' || $id=='' || $password1=='' || $password2=='' ) {
             $error = 'Champs requis';
         }
         if($password1 != $password2) {
@@ -100,14 +154,19 @@ function createLogin() {
                 'crypted'	=>	$crypted,
                 $end,
             );
-            $file = fopen("../ressources/login_gestionnaire.csv","a");
+            if($session == 'teacher') {
+                $file = fopen("../ressources/login_teacher.csv","a");
+            }
+            elseif($session == 'administrator') {
+                $file = fopen("../ressources/login_administrator.csv","a");
+            }
             fputcsv($file, $content);
             fclose($file);
-            $temp .= 'Session crée';
+            $temp .= "<p style = 'color:#00FF00'> Session créée </p>";
         }
     }
     if(isset($error)) {
-        $temp .= "<p style = 'color:#ff0000'> $error </p>";
+        $temp .= "<p style = 'color:#FF0000'> $error </p>";
     }
     return $temp;
 }
