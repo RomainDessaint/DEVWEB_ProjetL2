@@ -22,13 +22,12 @@ function login (){
     if (isset($_POST['submit'])) {
         $name = $_POST['name'];
         $password = $_POST['password'];
-        $comp = $name.','.$password;
 
         foreach ($lignes as $ligne[]) {
             $temp = explode(',',$ligne[$i]);
 
              if($temp[0] == $name && $temp[1] == $password) {
-                 return "Connexion effectuée !";
+                 header('Location : ../index.php');
              }
              else {
                  $retour = "L'identifiant ou le mot de passe est incorrect !";
