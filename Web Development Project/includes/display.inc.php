@@ -1,31 +1,41 @@
 <?php
 
 function display_header($title, $stylesheet) {
-		$header =
-			'<!DOCTYPE html>
-			<html>
-				<head>
-					<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-					<link rel="stylesheet" type="text/css" href="' .$stylesheet .'"/>
-					<title>' .$title .'</title>
-				</head>
+	$header =
+	'<!DOCTYPE html>
+	<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<link rel="stylesheet" type="text/css" href="' .$stylesheet .'"/>
+	<title>' .$title .'</title>
+	</head>
 
-				<body>
-					<header>
-						<div id = banniere>
-							<h1 id = titre_principal> Environnement Numérique de Travail </h1>
-						</div>
-					</header>';
+	<body>
+	<header>
+	<div id = banniere>
+	<h1 id = titre_principal> Environnement Numérique de Travail </h1>
+	</div>
+	</header>';
 	return $header;
 }
 
-function display_footer() {
-	$footer =
+function display_footer($type = "up") {
+	if($type == "up") {
+		$footer =
 		'<footer>
-			<a href = "#"> <h1> Retour haut de page </h1> </a>
+		<a href = "#"> <h1> Retour haut de page </h1> </a>
 		</footer>
 		</body>
-	</html>';
+		</html>';
+	}
+	elseif ($type == "back") {
+		$footer =
+		'<footer>
+		<a href = "../index.php"> <h1> Retour à l\'accueil </h1> </a>
+		</footer>
+		</body>
+		</html>';
+	}
 	return $footer;
 }
 

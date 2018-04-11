@@ -1,7 +1,7 @@
 <?php
-	include("../includes/display.inc.php");
-	include("../includes/isset.inc.php");
-	echo display_header("Espace professeurs", "../styles/style_logpages.css");
+include("../includes/display.inc.php");
+include("../includes/util.inc.php");
+echo display_header("Espace professeurs", "../styles/style_logpages.css");
 ?>
 
 <section>
@@ -13,3 +13,7 @@
 		?>
 	</article>
 </section>
+
+<?php
+echo display_footer("back");
+?>
