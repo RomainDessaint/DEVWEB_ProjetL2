@@ -11,6 +11,7 @@ echo display_header("Espace étudiants", "../styles/style_logpages.css");
 		<?php
 		echo formLogin();
 		if (isset($_POST['submit'])) {
+			echo login();
 		}
 		?>
 	</article>

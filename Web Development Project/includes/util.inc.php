@@ -16,28 +16,26 @@ function formLogin() {
      return $retour;
 }
 
-function login() {
-    $field = "";
-    $lignes = file("private.csv");
-    $i = 0;
-
+function login (){
+    $lignes = file("../ressources/login_etudiant.csv");
+    $i=0;
     if (isset($_POST['submit'])) {
         $name = $_POST['name'];
         $password = $_POST['password'];
         $comp = $name.','.$password;
-        strval($comp);
 
         foreach ($lignes as $ligne[]) {
-            strval($ligne[$i]);
-            if($comp == $ligne[$i]) {
-                return "Connexion !";
-            }
-            else {
-                $temp = "L'identifiant ou le mot de passe est incorrect !";
-                $i++;
-            }
+            $temp = explode(',',$ligne[$i]);
+
+             if($temp[0] == $name && $temp[1] == $password) {
+                 return "Connexion effectuée !";
+             }
+             else {
+                 $retour = "L'identifiant ou le mot de passe est incorrect !";
+                 $i++;
+             }
         }
-        return $temp;
+        return $retour;
     }
 }
 
