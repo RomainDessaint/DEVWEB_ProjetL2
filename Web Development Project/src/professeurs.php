@@ -9,7 +9,10 @@ echo display_header("Espace professeurs", "../styles/style_logpages.css");
 	<article>
 		<h2> Connectez-vous : </h2>
 		<?php
-		echo formLogin();
+		echo formLoginTeacher();
+		if (isset($_POST['submit'])) {
+			echo loginTeacher();
+		}
 		?>
 	</article>
 </section>
