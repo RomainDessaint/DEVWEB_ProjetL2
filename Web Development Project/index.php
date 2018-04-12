@@ -1,6 +1,8 @@
 <?php
 include("includes/display.inc.php");
 include("includes/isset.inc.php");
+include("includes/util.inc.php");
+
 echo display_header("ENT - Accueil", "styles/style_index.css");
 ?>
 
