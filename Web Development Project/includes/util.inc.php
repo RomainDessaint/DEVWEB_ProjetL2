@@ -232,5 +232,5 @@ function createLogin() {
 }
 
 function carabistouille() {
-    
+
 }
