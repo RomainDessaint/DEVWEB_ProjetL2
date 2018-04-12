@@ -33,8 +33,8 @@ function loginStudent() {
             $content = explode(',',$ligne[$i]);
 
             if($content[0] == $name && $content[1] == $password) {
-                $temp .= "<p style = 'color: #00FF00'> Connexion effectuée </p>";
-                return $temp;
+                header('Location:../index.php');
+                exit;
             }
             else {
                 $error = "Le nom ou le mot de passe est incorrect";
@@ -81,8 +81,8 @@ function loginTeacher() {
             $content = explode(',', $ligne[$i]);
 
             if($content[3] == $id && $content[4] == $password) {
-                $temp .= "<p style = 'color: #00FF00'> Connexion effectuée </p>";
-                return $temp;
+                header('Location:../index.php');
+                exit;
             }
             else {
                 $error = "L'identifiant ou le mot de passe est incorrect";
@@ -129,8 +129,8 @@ function loginAdministrator() {
             $content = explode(',', $ligne[$i]);
 
             if($content[3] == $id && $content[4] == $password) {
-                $temp .= "<p style = 'color: #00FF00'> Connexion effectuée </p>";
-                return $temp;
+                header('Location:../index.php');
+                exit;
             }
             else {
                 $error = "L'identifiant ou le mot de passe est incorrect";
