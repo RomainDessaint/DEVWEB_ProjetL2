@@ -79,9 +79,9 @@ function loginTeacher() {
 
         foreach ($lignes as $ligne[]) {
             $content = explode(',', $ligne[$i]);
-
+            
             if($content[3] == $id && $content[4] == $password) {
-                header('Location:../index.php');
+                header('Location: logged_teacher.php');
                 exit;
             }
             else {
@@ -129,7 +129,7 @@ function loginAdministrator() {
             $content = explode(',', $ligne[$i]);
 
             if($content[3] == $id && $content[4] == $password) {
-                header('Location:../index.php');
+                header('Location: logged_administrator.php');
                 exit;
             }
             else {

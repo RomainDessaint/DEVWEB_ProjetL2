@@ -7,10 +7,7 @@ echo display_header("Espace gestionnaires", "../styles/style_logpages.css");
 <section>
 	<h1> ESPACE GESTIONNAIRES </h1>
 	<article>
-		<h2> Connectez-vous : </h2>
-		<?php
-		echo formLoginAdministrator();
-		?>
+		<h2> Bienvenue </h2>
 	</article>
 </section>
 

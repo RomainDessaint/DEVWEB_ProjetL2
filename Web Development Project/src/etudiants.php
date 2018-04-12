@@ -1,7 +1,7 @@
 <?php
 include("../includes/display.inc.php");
 include("../includes/util.inc.php");
-echo display_header("Espace étudiants", "../styles/style_logpages.css");
+echo display_header("Connexion Etudiants", "../styles/style_logpages.css");
 ?>
 
 <section>
