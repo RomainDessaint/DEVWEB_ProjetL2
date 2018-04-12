@@ -230,7 +230,3 @@ function createLogin() {
     }
     return $temp;
 }
-
-function carabistouille() {
-
-}
