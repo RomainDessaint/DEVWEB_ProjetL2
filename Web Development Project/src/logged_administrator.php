@@ -7,7 +7,12 @@ echo display_header("Espace gestionnaires", "../styles/style_logpages.css");
 <section>
 	<h1> ESPACE GESTIONNAIRES </h1>
 	<article>
-		<h2> Bienvenue </h2>
+		<?php
+		echo formCreateLogin();
+		if (isset($_POST['submit'])) {
+			echo createLogin();
+		}
+		?>
 	</article>
 </section>
 

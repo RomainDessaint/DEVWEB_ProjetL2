@@ -4,7 +4,8 @@
 
 //Affichage d'un formulaire de connexion pour un étudiant
 function formLoginStudent() {
-    $retour = '<form action="#" method = "post">';
+    $retour =  '<h2> Connectez-vous : </h2>';
+    $retour .= '<form action="#" method = "post">';
     $retour .= '<table>';
     $retour .= '<tr>';
     $retour .= '<td> <label> Nom : </label> </td>';
@@ -52,7 +53,8 @@ function loginStudent() {
 
 //Affichage d'un formulaire de connexion pour un professeur/secrétaire
 function formLoginTeacher() {
-    $retour = '<form action="#" method = "post">';
+    $retour =  '<h2> Connectez-vous :</h2>';
+    $retour .= '<form action="#" method = "post">';
     $retour .= '<table>';
     $retour .= '<tr>';
     $retour .= '<td> <label> Identifiant : </label> </td>';
@@ -79,7 +81,7 @@ function loginTeacher() {
 
         foreach ($lignes as $ligne[]) {
             $content = explode(',', $ligne[$i]);
-            
+
             if($content[3] == $id && $content[4] == $password) {
                 header('Location: logged_teacher.php');
                 exit;
@@ -100,7 +102,8 @@ function loginTeacher() {
 
 //Affichage d'un formulaire de connexion pour un administrateur
 function formLoginAdministrator() {
-    $retour = '<form action="#" method = "post">';
+    $retour =  '<h2> Connectez-vous :</h2>';
+    $retour .= '<form action="#" method = "post">';
     $retour .= '<table>';
     $retour .= '<tr>';
     $retour .= '<td> <label> Identifiant : </label> </td>';
@@ -146,6 +149,7 @@ function loginAdministrator() {
 
 //Affichage d'un formulaire de création de session
 function formCreateLogin() {
+    $retour =  '<h2> Nouvelle session :</h2>';
     $retour = '<form action="#" method = "post">';
     $retour .= '<table>';
     $retour .= '<tr>';

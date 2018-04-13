@@ -7,7 +7,6 @@ echo display_header("Connexion Professeurs", "../styles/style_logpages.css");
 <section>
 	<h1> ESPACE PROFESSEURS </h1>
 	<article>
-		<h2> Connectez-vous : </h2>
 		<?php
 		echo formLoginTeacher();
 		if (isset($_POST['submit'])) {

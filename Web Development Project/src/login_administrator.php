@@ -7,7 +7,6 @@ echo display_header("Connexion Administrateurs", "../styles/style_logpages.css")
 <section>
 	<h1> ESPACE GESTIONNAIRES </h1>
 	<article>
-		<h2> Connectez-vous : </h2>
 		<?php
 		echo formLoginAdministrator();
 		if (isset($_POST['submit'])) {
