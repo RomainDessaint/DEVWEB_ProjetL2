@@ -28,11 +28,9 @@ function loginStudent() {
     if (isset($_POST['submit'])) {
         $name = $_POST['name'];
         $password = $_POST['password'];
-
         foreach ($lignes as $ligne[]) {
             $content = explode(',',$ligne[$i]);
-
-            if($content[0] == $name && $content[1] == $password) {
+            if($content[0] == $name && password_verify($password, $content[1])) {
                 header('Location:../index.php');
                 exit;
             }
