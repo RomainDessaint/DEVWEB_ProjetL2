@@ -4,7 +4,8 @@
 
 //Affichage d'un formulaire de connexion pour un étudiant
 function formLoginStudent() {
-    $retour = '<form action="#" method = "post">';
+    $retour =  '<h2> Connectez-vous : </h2>';
+    $retour .= '<form action="#" method = "post">';
     $retour .= '<table>';
     $retour .= '<tr>';
     $retour .= '<td> <label> Nom : </label> </td>';
@@ -23,7 +24,7 @@ function formLoginStudent() {
 //Authentification d'un étudiant
 function loginStudent() {
     $temp = "";
-    $lignes = file("../ressources/private_student.csv");
+    $lignes = file("../ressources/login_student.csv");
     $i=0;
     if (isset($_POST['submit'])) {
         $name = $_POST['name'];
@@ -52,7 +53,8 @@ function loginStudent() {
 
 //Affichage d'un formulaire de connexion pour un professeur/secrétaire
 function formLoginTeacher() {
-    $retour = '<form action="#" method = "post">';
+    $retour =  '<h2> Connectez-vous :</h2>';
+    $retour .= '<form action="#" method = "post">';
     $retour .= '<table>';
     $retour .= '<tr>';
     $retour .= '<td> <label> Identifiant : </label> </td>';
@@ -71,7 +73,7 @@ function formLoginTeacher() {
 //Authentification d'un professeur/secrétaire
 function loginTeacher() {
     $temp = "";
-    $lignes = file("../ressources/private_teacher.csv");
+    $lignes = file("../ressources/login_teacher.csv");
     $i=0;
     if (isset($_POST['submit'])) {
         $id = $_POST['id'];
@@ -100,7 +102,8 @@ function loginTeacher() {
 
 //Affichage d'un formulaire de connexion pour un administrateur
 function formLoginAdministrator() {
-    $retour = '<form action="#" method = "post">';
+    $retour =  '<h2> Connectez-vous :</h2>';
+    $retour .= '<form action="#" method = "post">';
     $retour .= '<table>';
     $retour .= '<tr>';
     $retour .= '<td> <label> Identifiant : </label> </td>';
@@ -119,7 +122,7 @@ function formLoginAdministrator() {
 //Authentification d'un administrateur
 function loginAdministrator() {
     $temp = "";
-    $lignes = file("../ressources/private_administrator.csv");
+    $lignes = file("../ressources/login_administrator.csv");
     $i=0;
     if (isset($_POST['submit'])) {
         $id = $_POST['id'];
@@ -146,6 +149,7 @@ function loginAdministrator() {
 
 //Affichage d'un formulaire de création de session
 function formCreateLogin() {
+    $retour =  '<h2> Nouvelle session :</h2>';
     $retour = '<form action="#" method = "post">';
     $retour .= '<table>';
     $retour .= '<tr>';
@@ -215,10 +219,10 @@ function createLogin() {
                 $end,
             );
             if($session == 'teacher') {
-                $file = fopen("../ressources/private_teacher.csv","a");
+                $file = fopen("../ressources/login_teacher.csv","a");
             }
             elseif($session == 'administrator') {
-                $file = fopen("../ressources/private_administrator.csv","a");
+                $file = fopen("../ressources/login_administrator.csv","a");
             }
             fputcsv($file, $content);
             fclose($file);
