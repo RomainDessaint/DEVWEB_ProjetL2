@@ -23,7 +23,7 @@ function formLoginStudent() {
 //Authentification d'un étudiant
 function loginStudent() {
     $temp = "";
-    $lignes = file("../ressources/login_student.csv");
+    $lignes = file("../ressources/private_student.csv");
     $i=0;
     if (isset($_POST['submit'])) {
         $name = $_POST['name'];
@@ -71,7 +71,7 @@ function formLoginTeacher() {
 //Authentification d'un professeur/secrétaire
 function loginTeacher() {
     $temp = "";
-    $lignes = file("../ressources/login_teacher.csv");
+    $lignes = file("../ressources/private_teacher.csv");
     $i=0;
     if (isset($_POST['submit'])) {
         $id = $_POST['id'];
@@ -79,7 +79,7 @@ function loginTeacher() {
 
         foreach ($lignes as $ligne[]) {
             $content = explode(',', $ligne[$i]);
-            
+
             if($content[3] == $id && $content[4] == $password) {
                 header('Location: logged_teacher.php');
                 exit;
@@ -119,7 +119,7 @@ function formLoginAdministrator() {
 //Authentification d'un administrateur
 function loginAdministrator() {
     $temp = "";
-    $lignes = file("../ressources/login_administrator.csv");
+    $lignes = file("../ressources/private_administrator.csv");
     $i=0;
     if (isset($_POST['submit'])) {
         $id = $_POST['id'];
@@ -215,10 +215,10 @@ function createLogin() {
                 $end,
             );
             if($session == 'teacher') {
-                $file = fopen("../ressources/login_teacher.csv","a");
+                $file = fopen("../ressources/private_teacher.csv","a");
             }
             elseif($session == 'administrator') {
-                $file = fopen("../ressources/login_administrator.csv","a");
+                $file = fopen("../ressources/private_administrator.csv","a");
             }
             fputcsv($file, $content);
             fclose($file);
