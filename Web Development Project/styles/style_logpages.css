@@ -46,6 +46,11 @@ section article p {
 	margin: 10px 0;
 }
 
+section a {
+	color: black;
+	text-decoration: none;
+}
+
 section article form {
 	text-align: center;
 }

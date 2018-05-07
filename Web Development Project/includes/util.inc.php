@@ -8,8 +8,8 @@ function formLoginStudent() {
     $retour .= '<form action="#" method = "post">';
     $retour .= '<table>';
     $retour .= '<tr>';
-    $retour .= '<td> <label> Nom : </label> </td>';
-    $retour .= '<td> <input type="text" name="name" value=""> </td>';
+    $retour .= '<td> <label> Identifiant : </label> </td>';
+    $retour .= '<td> <input type="text" name="id" value=""> </td>';
     $retour .= '</tr> <tr>';
     $retour .= '<td> <label> Mot de passe : </label> </td>';
     $retour .= '<td> <input type="password" name="password" value=""> </td>';
@@ -23,28 +23,33 @@ function formLoginStudent() {
 
 //Authentification d'un étudiant
 function loginStudent() {
-    $temp = "";
-    $lignes = file("../ressources/login_student.csv");
-    $i=0;
-    if (isset($_POST['submit'])) {
-        $name = $_POST['name'];
-        $password = $_POST['password'];
-        foreach ($lignes as $ligne[]) {
-            $content = explode(',',$ligne[$i]);
-            if($content[0] == $name && password_verify($password, $content[1])) {
-                header('Location:../index.php');
-                exit;
-            }
-            else {
-                $error = "Le nom ou le mot de passe est incorrect";
+    $error = "";
+    if(isset($_POST)) {
+        if (isset($_POST['id']) AND $_POST['password']) {
+            $lignes = file("../ressources/private_student.csv");
+            $i=0;
+            $id = $_POST['id'];
+            $password = $_POST['password'];
+            foreach ($lignes as $ligne[]) {
+                $content = explode(',',$ligne[$i]);
+                if($content[0] == $id && password_verify($password, $content[1])) {
+                    session_start();
+                    $_SESSION['login'] = $id;
+                    $_SESSION['logType'] = 1;
+                    header('location: logged_student.php');
+                    exit();
+                }
+                else {
+                    $error = "Le nom ou le mot de passe est incorrect </br>";
+                }
                 $i++;
             }
         }
-        if(isset($error)) {
-            $temp .= "<p style = 'color:#FF0000'> $error </p>";
+        else {
+            $error = "Veuillez vous identifier svp";
         }
-        return $temp;
     }
+    return $error;
 }
 
 ////////////////////////////            PROFESSEURS/SECRETAIRES         ////////////////////////////
@@ -70,30 +75,33 @@ function formLoginTeacher() {
 
 //Authentification d'un professeur/secrétaire
 function loginTeacher() {
-    $temp = "";
-    $lignes = file("../ressources/login_teacher.csv");
-    $i=0;
-    if (isset($_POST['submit'])) {
-        $id = $_POST['id'];
-        $password = $_POST['password'];
-
-        foreach ($lignes as $ligne[]) {
-            $content = explode(',', $ligne[$i]);
-
-            if($content[3] == $id && $content[4] == $password) {
-                header('Location: logged_teacher.php');
-                exit;
-            }
-            else {
-                $error = "L'identifiant ou le mot de passe est incorrect";
+    $error = "";
+    if(isset($_POST)) {
+        if (isset($_POST['id']) AND $_POST['password']) {
+            $lignes = file("../ressources/private_teacher.csv");
+            $i=0;
+            $id = $_POST['id'];
+            $password = $_POST['password'];
+            foreach ($lignes as $ligne[]) {
+                $content = explode(',',$ligne[$i]);
+                if($content[3] == $id && password_verify($password, $content[4])) {
+                    session_start();
+                    $_SESSION['login'] = $id;
+                    $_SESSION['logType'] = 2;
+                    header('location: logged_teacher.php');
+                    exit();
+                }
+                else {
+                    $error = "Le nom ou le mot de passe est incorrect </br>";
+                }
                 $i++;
             }
         }
-        if(isset($error)) {
-            $temp .= "<p style = 'color:#FF0000'> $error </p>";
+        else {
+            $error = "Veuillez vous identifier svp";
         }
-        return $temp;
     }
+    return $error;
 }
 
 ////////////////////////////            ADMINISTRATEUR          ////////////////////////////
@@ -119,30 +127,33 @@ function formLoginAdministrator() {
 
 //Authentification d'un administrateur
 function loginAdministrator() {
-    $temp = "";
-    $lignes = file("../ressources/login_administrator.csv");
-    $i=0;
-    if (isset($_POST['submit'])) {
-        $id = $_POST['id'];
-        $password = $_POST['password'];
-
-        foreach ($lignes as $ligne[]) {
-            $content = explode(',', $ligne[$i]);
-
-            if($content[3] == $id && $content[4] == $password) {
-                header('Location: logged_administrator.php');
-                exit;
-            }
-            else {
-                $error = "L'identifiant ou le mot de passe est incorrect";
+    $error = "";
+    if(isset($_POST)) {
+        if (isset($_POST['id']) AND $_POST['password']) {
+            $lignes = file("../ressources/private_administrator.csv");
+            $i=0;
+            $id = $_POST['id'];
+            $password = $_POST['password'];
+            foreach ($lignes as $ligne[]) {
+                $content = explode(',',$ligne[$i]);
+                if($content[3] == $id && password_verify($password, $content[4])) {
+                    session_start();
+                    $_SESSION['login'] = $id;
+                    $_SESSION['logType'] = 3;
+                    header('location: logged_administrator.php');
+                    exit();
+                }
+                else {
+                    $error = "Le nom ou le mot de passe est incorrect </br>";
+                }
                 $i++;
             }
         }
-        if(isset($error)) {
-            $temp .= "<p style = 'color:#FF0000'> $error </p>";
+        else {
+            $error = "Veuillez vous identifier svp";
         }
-        return $temp;
     }
+    return $error;
 }
 
 //Affichage d'un formulaire de création de session
@@ -206,8 +217,7 @@ function createLogin() {
 
         if(!isset($error)) {
             $end = null;
-            $crypted = $password1;
-            // $crypted = password_hash($password, PASSWORD_BCRYPT);
+            $crypted = password_hash($password1, PASSWORD_BCRYPT);
             $content = array(
                 'firstname'	=>	$firstname,
                 'name'		=>	$name,
@@ -224,11 +234,18 @@ function createLogin() {
             }
             fputcsv($file, $content);
             fclose($file);
-            $temp .= "<p style = 'color:#00FF00'> Session créée </p>";
+            $temp .= "Session créée";
+            $temp .= "<p style = 'color:#00FF00'> $temp </p>";
         }
     }
     if(isset($error)) {
         $temp .= "<p style = 'color:#FF0000'> $error </p>";
     }
     return $temp;
+}
+
+function formDisconnect(){
+    $retour = '<form action>';
+    $retour .= '<input id="bouton" type="submit" value="deconnecter" name="disconect">';
+    $retour .= '</form>';
 }

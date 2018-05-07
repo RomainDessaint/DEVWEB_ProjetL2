@@ -1,6 +1,9 @@
 <?php
 include("../includes/display.inc.php");
 include("../includes/util.inc.php");
+
+$temp = loginStudent();
+
 echo display_header("Connexion Etudiants", "../styles/style_logpages.css");
 ?>
 
@@ -8,10 +11,11 @@ echo display_header("Connexion Etudiants", "../styles/style_logpages.css");
 	<h1> Espace étudiant </h1>
 	<article>
 		<?php
+
+        $temp = "<p style = 'color:#FF0000'> $temp </p>";
 		echo formLoginStudent();
-		if (isset($_POST['submit'])) {
-			echo loginStudent();
-		}
+		echo $temp;
+
 		?>
 	</article>
 </section>

@@ -3,6 +3,9 @@ include("includes/display.inc.php");
 include("includes/isset.inc.php");
 include("includes/util.inc.php");
 
+session_start();
+session_destroy();
+
 echo display_header("ENT - Accueil", "styles/style_index.css");
 ?>
 
