@@ -19,6 +19,7 @@ echo display_header("Connexion Etudiants", "../styles/style_logpages.css");
 		echo formLoginStudent();
 		echo $temp;
 		?>
+
 	</article>
 </section>
 

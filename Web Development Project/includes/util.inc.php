@@ -34,6 +34,7 @@ function loginStudent() {
                 $content = explode(',',$ligne[$i]);
                 if($content[0] == $id && password_verify($password, $content[1])) {
                     session_start();
+                    $_SESSION['connected'] = true;
                     $_SESSION['login'] = $id;
                     $_SESSION['logType'] = 1;
                     header('location: logged_student.php');
@@ -86,6 +87,7 @@ function loginTeacher() {
                 $content = explode(',',$ligne[$i]);
                 if($content[3] == $id && password_verify($password, $content[4])) {
                     session_start();
+                    $_SESSION['connected'] = true;
                     $_SESSION['login'] = $id;
                     $_SESSION['logType'] = 2;
                     header('location: logged_teacher.php');
@@ -138,6 +140,7 @@ function loginAdministrator() {
                 $content = explode(',',$ligne[$i]);
                 if($content[3] == $id && password_verify($password, $content[4])) {
                     session_start();
+                    $_SESSION['connected'] = true;
                     $_SESSION['login'] = $id;
                     $_SESSION['logType'] = 3;
                     header('location: logged_administrator.php');
