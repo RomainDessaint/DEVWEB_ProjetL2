@@ -12,14 +12,13 @@ echo display_header("Connexion Etudiants", "../styles/style_logpages.css");
 	<?php
 	echo display_titleLog("Espace Etudiants");
 	?>
-	<article>
 
+	<article>
 		<?php
 		$temp = "<p style = 'color:#FF0000'> $temp </p>";
 		echo formLoginStudent();
 		echo $temp;
 		?>
-
 	</article>
 </section>
 
