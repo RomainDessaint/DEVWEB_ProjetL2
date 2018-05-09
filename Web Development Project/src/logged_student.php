@@ -16,6 +16,9 @@ echo display_header("Espace Etudiants", "../styles/style_logged_student.css");
 	<article>
         <?php
             echo formUpload();
+            if (isset($_POST['submit'])) {
+                echo upload();
+            }
         ?>
 
 	</article>
