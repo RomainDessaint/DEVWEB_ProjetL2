@@ -50,7 +50,7 @@ function display_titleLog($title = "Espace ?") {
 		$retour .= "<tr> <td> <a href = ''> Se déconnecter </a> </td> </tr>";
 	}
 	else {
-		$retour .= "<tr> <td> Vous n'êtes pas connecté </td> </tr>";
+		$retour .= "<tr> <td> <p> Vous n'êtes pas connecté </p> </td> </tr>";
 	}
 	$retour .= "</table> </td>";
 	$retour .= "</tr> </table>";
