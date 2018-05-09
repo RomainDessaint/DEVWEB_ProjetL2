@@ -53,6 +53,60 @@ function loginStudent() {
     return $error;
 }
 
+//Affichage d'un formulaire d'upload de photo
+function formUpload(){
+    $retour = '<form method="post" enctype="multipart/form-data">';
+    $retour .= '<table>';
+    $retour .= '<tr>';
+    $retour .= '<td> <label> Prénom : </label> </td>';
+    $retour .= '<td> <input type="text" name="firstname" value=""> </td>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td> <label> Nom : </label> </td>';
+    $retour .= '<td> <input type="text" name="name" value=""> </td>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td> <label for="file" class="label-file"> Choisir une image </label> <input id="file" class="input-file" type="file" name="img"> </td>';
+    $retour .= '</tr>';
+    $retour .= '<td colspan="2"> <input id="bouton" type="submit" value="UPLOAD" name="submit"> </td>';
+    $retour .= '</form>';
+
+    return $retour;
+}
+
+//Upload de la photo d'un étudiant
+function upload(){
+    $retour = "";
+    $file = $_FILES['img'];
+    $fileName = $_FILES['img']['name'];
+    $fileTmpName = $_FILES['img']['tmp_name'];
+    $fileSize = $_FILES['img']['size'];
+    $fileError = $_FILES['img']['error'];
+    $fileType = $_FILES['img']['type'];
+
+    $fileExt = explode('.', $fileName);
+
+    $fileActualExt = strtolower(end($fileExt));
+
+    $allowed = array('jpg', 'jpeg', 'png');
+
+    if (in_array($fileActualExt, $allowed)) {
+        if ($fileError === 0) {
+            if ($fileSize < 1000000) {
+                $fileNameNew = uniqid('', true).".".$fileActualExt;
+                $fileDestination = '../uploads/'.$fileNameNew;
+                move_uploaded_file($fileTmpName, $fileDestination);
+                $retour = "Upload réussi !";
+            } else {
+                $retour = "Votre image est trop lourde !";
+            }
+        } else {
+            $retour = "Une erreur est apparue lors de l'upload de votre image !";
+        }
+    } else {
+        $retour = "Vous ne pouvez pas upload des fichiers de ce type !";
+    }
+    return $retour;
+}
+
 ////////////////////////////            PROFESSEURS/SECRETAIRES         ////////////////////////////
 
 //Affichage d'un formulaire de connexion pour un professeur/secrétaire
@@ -245,65 +299,5 @@ function createLogin() {
         $temp .= "<p style = 'color:#FF0000'> $error </p>";
     }
     return $temp;
-}
-
-function formDisconnect(){
-    $retour = '<form action>';
-    $retour .= '<input id="bouton" type="submit" value="deconnecter" name="disconect">';
-    $retour .= '</form>';
-}
-
-function formUpload(){
-    $retour = '<form method="post" enctype="multipart/form-data">';
-    $retour .= '<table>';
-    $retour .= '<tr>';
-    $retour .= '<td> <label> Prénom : </label> </td>';
-    $retour .= '<td> <input type="text" name="firstname" value=""> </td>';
-    $retour .= '</tr> <tr>';
-    $retour .= '<td> <label> Nom : </label> </td>';
-    $retour .= '<td> <input type="text" name="name" value=""> </td>';
-    $retour .= '</tr> <tr>';
-    $retour .= '<td> <label for="file" class="label-file"> Choisir une image </label> <input id="file" class="input-file" type="file" name="img"> </td>';
-    $retour .= '</tr>';
-    $retour .= '<td colspan="2"> <input id="bouton" type="submit" value="UPLOAD" name="submit"> </td>';
-    $retour .= '</form>';
-
-    return $retour;
-}
-
-
-function upload(){
-    $retour = "";
-
-    $file = $_FILES['img'];
-    $fileName = $_FILES['img']['name'];
-    $fileTmpName = $_FILES['img']['tmp_name'];
-    $fileSize = $_FILES['img']['size'];
-    $fileError = $_FILES['img']['error'];
-    $fileType = $_FILES['img']['type'];
-
-    $fileExt = explode('.', $fileName);
-
-    $fileActualExt = strtolower(end($fileExt));
-
-    $allowed = array('jpg', 'jpeg', 'png');
-
-    if (in_array($fileActualExt, $allowed)) {
-        if ($fileError === 0) {
-            if ($fileSize < 1000000) {
-                $fileNameNew = uniqid('', true).".".$fileActualExt;
-                $fileDestination = '../uploads/'.$fileNameNew;
-                move_uploaded_file($fileTmpName, $fileDestination);
-                $retour = "Upload réussi !";
-            } else {
-                $retour = "Votre image est trop lourde !";
-            }
-        } else {
-            $retour = "Une erreur est apparue lors de l'upload de votre image !";
-        }
-    } else {
-        $retour = "Vous ne pouvez pas upload des fichiers de ce type !";
-    }
-    return $retour;
 }
 ?>
