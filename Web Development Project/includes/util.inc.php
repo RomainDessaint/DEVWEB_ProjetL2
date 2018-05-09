@@ -276,7 +276,8 @@ function formUpload(){
 
 function upload(){
     $retour = "";
-
+    $end = null;
+// Partie concernant l'image
     $file = $_FILES['img'];
     $fileName = $_FILES['img']['name'];
     $fileTmpName = $_FILES['img']['tmp_name'];
@@ -306,6 +307,24 @@ function upload(){
     } else {
         $retour = "Vous ne pouvez pas upload des fichiers de ce type !";
     }
+
+    // Partie concernant le nom et le prénom
+        $firstname = $_POST['firstname'];
+        $name = $_POST['name'];
+
+        $content = array(
+            'firstname'	=>	$firstname,
+            'name'		=>	$name,
+            'img'	=>	$fileNameNew,
+            $end,
+        );
+
+        if (!($firstname == "") AND !($name == "")) {
+            $file = fopen("../ressources/info_student.csv","a");
+            fputcsv($file, $content);
+            fclose($file);
+        }
+
     return $retour;
 }
 ?>
