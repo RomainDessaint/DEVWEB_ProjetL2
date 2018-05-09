@@ -253,6 +253,7 @@ function formDisconnect(){
     $retour .= '</form>';
 }
 
+
 function formUpload(){
     $retour = '<form method="post" enctype="multipart/form-data">';
     $retour .= '<table>';
