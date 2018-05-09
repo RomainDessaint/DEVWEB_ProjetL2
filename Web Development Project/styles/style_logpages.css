@@ -44,6 +44,10 @@ section h1 {
 	text-align: center;
 }
 
+#title {
+	float: left;
+}
+
 #info {
 	float: right;
 }
@@ -63,6 +67,13 @@ section article p {
 	margin: 10px 0;
 }
 
+<<<<<<< HEAD
+=======
+section table {
+	margin: auto;
+}
+
+>>>>>>> 74489b5d24a180cd87086482fcfce839d30bdce7
 section article form {
 	text-align: center;
 }
