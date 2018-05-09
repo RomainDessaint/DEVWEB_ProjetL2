@@ -8,15 +8,16 @@ if(($_SESSION['logType']) != 1) {
   exit();
 }
 
-echo display_header("Espace Etudiants", "../styles/style_logpages.css");
+echo display_header("Espace Etudiants", "../styles/style_logged_student.css");
 ?>
 
 <section>
 	<h1> ESPACE ETUDIANTS </h1>
 	<article>
-		<?php
+        <?php
+            echo formUpload();
+        ?>
 
-		?>
 	</article>
 </section>
 

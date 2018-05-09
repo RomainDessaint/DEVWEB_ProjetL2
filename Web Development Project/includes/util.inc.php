@@ -249,3 +249,16 @@ function formDisconnect(){
     $retour .= '<input id="bouton" type="submit" value="deconnecter" name="disconect">';
     $retour .= '</form>';
 }
+
+function formUpload(){
+    $retour = '<form method="post" action="upload.php" enctype="multipart/form-data">';
+    $retour .= '<input type="hidden" name="MAX_FILE_SIZE" value="12345" />';
+    $retour .= '<label for="file" class="label-file">Choisir une image</label>';
+    $retour .= '<input id="file" class="input-file" type="file" name="img">';
+    $retour .= '<input id="bouton" type="submit" value="UPLOAD" name="submit">';
+    $retour .= '</form>';
+
+    return $retour;
+}
+
+?>
