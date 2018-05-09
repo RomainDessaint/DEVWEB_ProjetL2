@@ -9,7 +9,10 @@ echo display_header("ENT - Accueil", "styles/style_index.css");
 ?>
 
 <section>
-	<h1> Accueil </h1>
+	<?php
+	echo display_titleLog("Accueil");
+	?>
+
 	<article>
 		<a href="src/login_student.php"> <h2> ESPACE ETUDIANTS </h2> </a>
 	</article>

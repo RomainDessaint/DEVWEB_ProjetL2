@@ -29,6 +29,12 @@ section h1, h2 {
 	color: black;
 }
 
+section h1 {
+	padding: 20px;
+	font-size: 40px;
+	background-color: white;
+}
+
 #titleLog {
 	width: 100%;
 	border: 1px solid black;
@@ -40,12 +46,6 @@ section h1, h2 {
 
 #info {
 	float: right;
-}
-
-section h1 {
-	padding: 5px;
-	font-size: 40px;
-	background-color: white;
 }
 
 section article {
