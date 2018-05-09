@@ -19,6 +19,10 @@ echo display_header("Espace gestionnaires", "../styles/style_logpages.css");
 	<article>
 
 		<?php
+               echo formCreateLogin();
+			if(isset($_POST['createSession'])) {
+				echo "<p> La session a été créée <p>";
+			}
 		?>
 
 	</article>

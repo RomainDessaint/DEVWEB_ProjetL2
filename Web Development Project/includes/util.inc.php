@@ -146,7 +146,7 @@ function loginTeacher() {
                     $_SESSION['connected'] = true;
                     $_SESSION['login'] = $id;
                     $_SESSION['logType'] = 2;
-                    header('location: logged_teacher.php');
+                    header('location: choice_teacher.php');
                     exit();
                 }
                 else {
@@ -160,6 +160,35 @@ function loginTeacher() {
         }
     }
     return $error;
+}
+
+function formClassgroup($mode = 1) {
+    if($mode == 1) {
+        $retour = '<h2> Visualiser les groupes de TD : </h2>';
+    }
+    if($mode == 2) {
+        $retour = '<h2> Organiser les groupes de TD : </h2>';
+    }
+    $retour .= '<table> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Groupe 1 : </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="1"> </td>';
+    $retour .= ' </form> </tr> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Groupe 2 : </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="2"> </td>';
+    $retour .= '</form> </tr> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Groupe 3 : </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="3"> </td>';
+    $retour .= '</form> </tr> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Groupe 4 : </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="4"> </td>';
+    $retour .= '</form> </tr> </table>';
+
+    return $retour;
+
 }
 
 ////////////////////////////            ADMINISTRATEUR          ////////////////////////////
@@ -199,7 +228,7 @@ function loginAdministrator() {
                     $_SESSION['connected'] = true;
                     $_SESSION['login'] = $id;
                     $_SESSION['logType'] = 3;
-                    header('location: logged_administrator.php');
+                    header('location: choice_administrator.php');
                     exit();
                 }
                 else {
@@ -215,10 +244,24 @@ function loginAdministrator() {
     return $error;
 }
 
+function formChoiceAdministrator() {
+    $retour = '<table> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Gérer les filières : </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="group"> </td>';
+    $retour .= ' </form> </tr> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Gérer les sessions : </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="session"> </td>';
+    $retour .= '</form> </tr> </table>';
+
+    return $retour;
+}
+
 //Affichage d'un formulaire de création de session
 function formCreateLogin() {
-    $retour =  '<h2> Nouvelle session :</h2>';
-    $retour = '<form action="#" method = "post">';
+    $retour =  '<h2> Créer une nouvelle session : </h2>';
+    $retour .= '<form action="#" method = "post">';
     $retour .= '<table>';
     $retour .= '<tr>';
     $retour .= '<td> <label> Session : </label> </td>';
@@ -250,7 +293,7 @@ function formCreateLogin() {
     $retour .= '<td> <input type="password" name="password2" value=""> </td>';
     $retour .= '</tr>';
     $retour .= '</table>';
-    $retour .= '<input id="bouton" type="submit" value="Valider" name="submit">';
+    $retour .= '<input id="bouton" type="submit" value="Valider" name="createSession">';
     $retour .= '</form>';
 
     return $retour;
