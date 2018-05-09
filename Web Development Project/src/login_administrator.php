@@ -12,14 +12,13 @@ echo display_header("Connexion Administrateurs", "../styles/style_logpages.css")
 	<?php
 	echo display_titleLog("Espace Gestionnaires");
 	?>
-	<article>
 
+	<article>
 		<?php
 		$temp = "<p style = 'color:#FF0000'> $temp </p>";
 		echo formLoginAdministrator();
 		echo $temp;
 		?>
-
 	</article>
 </section>
 
