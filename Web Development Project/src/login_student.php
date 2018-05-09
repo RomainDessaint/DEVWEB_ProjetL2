@@ -15,7 +15,7 @@ echo display_header("Connexion Etudiants", "../styles/style_logpages.css");
 	<article>
 
 		<?php
-        $temp = "<p style = 'color:#FF0000'> $temp </p>";
+		$temp = "<p style = 'color:#FF0000'> $temp </p>";
 		echo formLoginStudent();
 		echo $temp;
 		?>
