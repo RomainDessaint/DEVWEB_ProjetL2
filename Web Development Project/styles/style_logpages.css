@@ -151,3 +151,14 @@ footer a {
 .input-file {
     display: none;
 }
+
+#custom-button {
+	padding: 10px;
+	color: white;
+	background-color: #efefef;
+	cursor: pointer;
+}
+
+#custom-button:hover{
+	background-color: #00b28f;
+}

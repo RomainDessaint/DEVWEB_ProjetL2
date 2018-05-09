@@ -264,8 +264,9 @@ function formUpload(){
     $retour .= '<td> <label> Nom : </label> </td>';
     $retour .= '<td> <input type="text" name="name" value=""> </td>';
     $retour .= '</tr> <tr>';
-    $retour .= '<td> <label for="file" class="label-file"> Choisir une image </label> <input id="file" class="input-file" type="file" name="img"> </td>';
-    $retour .= '<td> <input id="bouton" type="submit" value="Valider" name="submit"> </td>';
+    $retour .= '<td colspan="2"> <input id="real-file" hidden="hidden" type="file" name="img" /> <button type="button" id="custom-button">Choisir une image</button> <span id="custom-text">Aucune image choisie.</span></td>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td colspan=2> <input id="bouton" type="submit" value="Valider" name="submit"> </td>';
     $retour .= '</tr>';
     $retour .= '</table>';
     $retour .= '</form>';
@@ -295,41 +296,39 @@ function upload(){
 
     $allowed = array('jpg', 'jpeg', 'png');
 
-    if (in_array($fileActualExt, $allowed)) {
-        if ($fileError === 0) {
-            if ($fileSize < 1000000) {
-                $fileNameNew = uniqid('', true).".".$fileActualExt;
-                $fileDestination = '../uploads/'.$fileNameNew;
+    if (($firstname != null) AND ($name != null) AND ($fileName != null)) {
+        if (in_array($fileActualExt, $allowed)) {
+            if ($fileError === 0) {
+                if ($fileSize < 1000000) {
+                    $fileNameNew = uniqid('', true).".".$fileActualExt;
+                    $fileDestination = '../uploads/'.$fileNameNew;
 
-                // Partie concernant le nom et le prénom
-                $content = array(
-                    'firstname'	=>	$firstname,
-                    'name'		=>	$name,
-                    'img'	=>	$fileNameNew,
-                    $end,
-                );
+                    // Partie concernant le nom et le prénom
+                    $content = array(
+                        'firstname'	=>	$firstname,
+                        'name'		=>	$name,
+                        'img'	=>	$fileNameNew,
+                        $end,
+                    );
 
-                if (!($firstname == "") AND !($name == "")) {
-                    $file = fopen("../ressources/info_student.csv","a");
-                    fputcsv($file, $content);
-                    fclose($file);
+                        $file = fopen("../ressources/info_student.csv","a");
+                        fputcsv($file, $content);
+                        fclose($file);
+                    // Fin de la Partie concernant le nom et le prénom
+
+                    move_uploaded_file($fileTmpName, $fileDestination);
+                    $retour = "Upload réussi !";
+                } else {
+                    $retour = "Votre image est trop lourde !";
                 }
-                // Fin de la Partie concernant le nom et le prénom
-
-                move_uploaded_file($fileTmpName, $fileDestination);
-                $retour = "Upload réussi !";
             } else {
-                $retour = "Votre image est trop lourde !";
+                $retour = "Une erreur est apparue lors de l'upload de votre image !";
             }
         } else {
-            $retour = "Une erreur est apparue lors de l'upload de votre image !";
+                $retour = "Vous ne pouvez pas upload des fichiers de ce type !";
         }
     } else {
-        if (!($firstname == "") AND !($name == "") AND !($fileName == "")) {
-            $retour = "Vous ne pouvez pas upload des fichiers de ce type !";
-        } else {
-            $retour = "Veuillez renseignez un nom, un prénom, ainsi qu'une image !";
-        }
+        $retour = "Veuillez renseignez un nom, un prénom, ainsi qu'une image !";
     }
 
     // Fin de la partie concernant l'image
