@@ -65,8 +65,9 @@ function formUpload(){
     $retour .= '<td> <input type="text" name="name" value=""> </td>';
     $retour .= '</tr> <tr>';
     $retour .= '<td> <label for="file" class="label-file"> Choisir une image </label> <input id="file" class="input-file" type="file" name="img"> </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="Valider" name="submit"> </td>';
     $retour .= '</tr>';
-    $retour .= '<td colspan="2"> <input id="bouton" type="submit" value="UPLOAD" name="submit"> </td>';
+    $retour .= '</table>';
     $retour .= '</form>';
 
     return $retour;
@@ -75,6 +76,7 @@ function formUpload(){
 //Upload de la photo d'un étudiant
 function upload(){
     $retour = "";
+
     $file = $_FILES['img'];
     $fileName = $_FILES['img']['name'];
     $fileTmpName = $_FILES['img']['tmp_name'];
@@ -299,5 +301,11 @@ function createLogin() {
         $temp .= "<p style = 'color:#FF0000'> $error </p>";
     }
     return $temp;
+}
+
+function formDisconnect(){
+    $retour = '<form action>';
+    $retour .= '<input id="bouton" type="submit" value="deconnecter" name="disconect">';
+    $retour .= '</form>';
 }
 ?>
