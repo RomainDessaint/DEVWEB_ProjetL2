@@ -29,10 +29,22 @@ section h1, h2 {
 	color: black;
 }
 
+#titleLog {
+	width: 100%;
+	border: 1px solid black;
+}
+
+#titleLog td {
+	text-align: center;
+}
+
+#info {
+	float: right;
+}
+
 section h1 {
 	padding: 5px;
 	font-size: 40px;
-	border: 1px solid black;
 	background-color: white;
 }
 

@@ -12,10 +12,15 @@ echo display_header("Espace gestionnaires", "../styles/style_logpages.css");
 ?>
 
 <section>
-	<h1> ESPACE GESTIONNAIRES </h1>
+     <?php
+	echo display_titleLog("Espace Gestionnaires");
+	?>
+
 	<article>
+
 		<?php
 		?>
+
 	</article>
 </section>
 

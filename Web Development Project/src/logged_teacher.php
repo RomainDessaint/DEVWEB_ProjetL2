@@ -12,11 +12,15 @@ echo display_header("Espace professeurs", "../styles/style_logpages.css");
 ?>
 
 <section>
-	<h1> ESPACE PROFESSEURS </h1>
-	<article>
-		<?php
+     <?php
+	echo display_titleLog("Espace Professeurs");
+	?>
 
+	<article>
+
+		<?php
 		?>
+
 	</article>
 </section>
 

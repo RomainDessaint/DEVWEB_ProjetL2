@@ -2,21 +2,24 @@
 include("../includes/display.inc.php");
 include("../includes/util.inc.php");
 
+session_start();
 $temp = loginStudent();
 
 echo display_header("Connexion Etudiants", "../styles/style_logpages.css");
 ?>
 
 <section>
-	<h1> Espace étudiant </h1>
+	<?php
+	echo display_titleLog("Espace Etudiants");
+	?>
 	<article>
-		<?php
 
+		<?php
         $temp = "<p style = 'color:#FF0000'> $temp </p>";
 		echo formLoginStudent();
 		echo $temp;
-
 		?>
+
 	</article>
 </section>
 
