@@ -138,18 +138,3 @@ footer a {
 	color: black;
 	text-decoration: none;
 }
-
-.label-file {
-    cursor: pointer;
-    color: #00b1ca;
-    font-weight: bold;
-	padding-right: : 50px;
-}
-
-.label-file:hover {
-    color: #25a5c4;
-}
-
-.input-file {
-    display: none;
-}

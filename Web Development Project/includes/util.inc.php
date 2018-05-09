@@ -264,8 +264,9 @@ function formUpload(){
     $retour .= '<td> <input type="text" name="name" value=""> </td>';
     $retour .= '</tr> <tr>';
     $retour .= '<td> <label for="file" class="label-file"> Choisir une image </label> <input id="file" class="input-file" type="file" name="img"> </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="Valider" name="submit"> </td>';
     $retour .= '</tr>';
-    $retour .= '<td colspan="2"> <input id="bouton" type="submit" value="UPLOAD" name="submit"> </td>';
+    $retour .= '</table>';
     $retour .= '</form>';
 
     return $retour;
