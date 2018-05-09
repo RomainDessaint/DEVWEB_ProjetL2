@@ -277,6 +277,10 @@ function formUpload(){
 function upload(){
     $retour = "";
     $end = null;
+// Varibles pour le prénom et le nom
+    $firstname = $_POST['firstname'];
+    $name = $_POST['name'];
+
 // Partie concernant l'image
     $file = $_FILES['img'];
     $fileName = $_FILES['img']['name'];
@@ -296,6 +300,22 @@ function upload(){
             if ($fileSize < 1000000) {
                 $fileNameNew = uniqid('', true).".".$fileActualExt;
                 $fileDestination = '../uploads/'.$fileNameNew;
+
+                // Partie concernant le nom et le prénom
+                $content = array(
+                    'firstname'	=>	$firstname,
+                    'name'		=>	$name,
+                    'img'	=>	$fileNameNew,
+                    $end,
+                );
+
+                if (!($firstname == "") AND !($name == "")) {
+                    $file = fopen("../ressources/info_student.csv","a");
+                    fputcsv($file, $content);
+                    fclose($file);
+                }
+                // Fin de la Partie concernant le nom et le prénom
+
                 move_uploaded_file($fileTmpName, $fileDestination);
                 $retour = "Upload réussi !";
             } else {
@@ -305,25 +325,14 @@ function upload(){
             $retour = "Une erreur est apparue lors de l'upload de votre image !";
         }
     } else {
-        $retour = "Vous ne pouvez pas upload des fichiers de ce type !";
+        if (!($firstname == "") AND !($name == "") AND !($fileName == "")) {
+            $retour = "Vous ne pouvez pas upload des fichiers de ce type !";
+        } else {
+            $retour = "Veuillez renseignez un nom, un prénom, ainsi qu'une image !";
+        }
     }
 
-    // Partie concernant le nom et le prénom
-        $firstname = $_POST['firstname'];
-        $name = $_POST['name'];
-
-        $content = array(
-            'firstname'	=>	$firstname,
-            'name'		=>	$name,
-            'img'	=>	$fileNameNew,
-            $end,
-        );
-
-        if (!($firstname == "") AND !($name == "")) {
-            $file = fopen("../ressources/info_student.csv","a");
-            fputcsv($file, $content);
-            fclose($file);
-        }
+    // Fin de la partie concernant l'image
 
     return $retour;
 }

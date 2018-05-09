@@ -8,7 +8,7 @@ if(($_SESSION['logType']) != 1) {
      exit();
 }
 
-echo display_header("Espace Etudiants", "../styles/style_logged_student.css");
+echo display_header("Espace Etudiants", "../styles/style_logpages.css");
 ?>
 
 <section>

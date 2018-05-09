@@ -143,9 +143,7 @@ footer a {
     cursor: pointer;
     color: #00b1ca;
     font-weight: bold;
-	text-align: center;
 }
-
 .label-file:hover {
     color: #25a5c4;
 }
