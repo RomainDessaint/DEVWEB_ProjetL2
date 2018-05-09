@@ -1,6 +1,5 @@
 <?php
 include("includes/display.inc.php");
-include("includes/isset.inc.php");
 include("includes/util.inc.php");
 
 session_start();

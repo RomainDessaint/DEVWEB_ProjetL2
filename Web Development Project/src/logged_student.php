@@ -12,7 +12,10 @@ echo display_header("Espace Etudiants", "../styles/style_logpages.css");
 ?>
 
 <section>
-	<h1> ESPACE ETUDIANTS </h1>
+	<?php
+	echo display_titleLog("Espace Etudiants");
+	?>
+
 	<article>
 		<?php
 

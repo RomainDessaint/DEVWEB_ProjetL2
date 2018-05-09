@@ -39,10 +39,23 @@ function display_footer($type = "up") {
 	return $footer;
 }
 
-function display_login() {
-	$login = '<form method="post" action="src/TD7.php">';
-	$login .= '<input type="submit" value="S\'identifier" name="login">';
-	return $login;
+function display_titleLog($title = "Espace ?") {
+	$retour = "<table id = 'titleLog'> <tr>";
+	$retour .= "<td> <table id = 'title'>";
+	$retour .= "<tr> <td> <h1> $title </h1> </td> </tr>";
+	$retour .= "</table> </td>";
+	$retour .= "<td> <table id = 'info'>";
+	if(isset($_SESSION['connected'])) {
+		$retour .= "<tr> <td> Connecté en tant que : " .$_SESSION['login'] ."</td> </tr>";
+		$retour .= "<tr> <td> <a href = ''> Se déconnecter </a> </td> </tr>";
+	}
+	else {
+		$retour .= "<tr> <td> Vous n'êtes pas connecté </td> </tr>";
+	}
+	$retour .= "</table> </td>";
+	$retour .= "</tr> </table>";
+
+	return $retour;
 }
 
 ?>
