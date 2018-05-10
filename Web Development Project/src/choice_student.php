@@ -3,9 +3,16 @@ include("../includes/display.inc.php");
 include("../includes/util.inc.php");
 
 session_start();
-$temp = loginStudent();
 
-echo display_header("Connexion Etudiants", "../styles/style_logpages.css");
+if(isset($_POST['register'])) {
+	header('location: register_student.php');
+}
+
+if(isset($_POST['signin'])) {
+	header('location: login_student.php');
+}
+
+echo display_header("Espace Etudiants", "../styles/style_logpages.css");
 ?>
 
 <section>
@@ -15,11 +22,7 @@ echo display_header("Connexion Etudiants", "../styles/style_logpages.css");
 
 	<article>
 		<?php
-		$temp = "<p style = 'color:#FF0000'> $temp </p>";
-		echo formLoginStudent();
-		if(isset($_POST['login'])) {
-			echo $temp;
-		}
+		echo formChoiceStudent();
 		?>
 	</article>
 </section>

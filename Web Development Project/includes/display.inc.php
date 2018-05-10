@@ -46,8 +46,19 @@ function display_titleLog($title = "Espace ?") {
 	$retour .= "</table> </td>";
 	$retour .= "<td> <table id = 'info'>";
 	if(isset($_SESSION['connected'])) {
+		switch($_SESSION['logType']) {
+			case 1:
+				$retour .= "<tr> <td> Profil : Etudiant </td> </tr>";
+				break;
+			case 2:
+				$retour .= "<tr> <td> Profil : Professeur </td> </tr>";
+				break;
+			case 3:
+				$retour .= "<tr> <td> Profil : Gestionnaire </td> </tr>";
+				break;
+		}
 		$retour .= "<tr> <td> Connecté en tant que : " .$_SESSION['login'] ."</td> </tr>";
-		$retour .= "<tr> <td> <a href = ''> Se déconnecter </a> </td> </tr>";
+		$retour .= "<tr> <td> <a href = '../includes/deconnexion.inc.php'> Se déconnecter </a> </td> </tr>";
 	}
 	else {
 		$retour .= "<tr> <td> <p> Vous n'êtes pas connecté </p> </td> </tr>";

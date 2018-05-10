@@ -2,6 +2,86 @@
 
 ////////////////////////////            ETUDIANTS          ////////////////////////////
 
+//Affichage des possibilités de l'espace étudiant
+function formChoiceStudent() {
+    $retour = '<table> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Première connexion ? </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="S\'inscrire" name="register"> </td>';
+    $retour .= ' </form> </tr> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Déja inscrit ? </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="Se connecter" name="signin"> </td>';
+    $retour .= '</form> </tr> </table>';
+
+    return $retour;
+}
+
+function formRegisterStudent() {
+    $retour =  '<h2> Inscrivez-vous : </h2>';
+    $retour .= '<form action="#" method = "post">';
+    $retour .= '<table>';
+    $retour .= '<tr>';
+    $retour .= '<td> <label> N° étudiant : </label> </td>';
+    $retour .= '<td> <input type="text" name="num" value=""> </td>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td> <label> Identifiant : </label> </td>';
+    $retour .= '<td> <input type="text" name="id" value=""> </td>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td> <label> Mot de passe : </label> </td>';
+    $retour .= '<td> <input type="password" name="password" value=""> </td>';
+    $retour .= '</tr>';
+    $retour .= '</table>';
+    $retour .= '<input id="bouton" type="submit" value="Valider" name="register">';
+    $retour .= '</form>';
+
+    return $retour;
+}
+
+//Authentification d'un étudiant
+function registerStudent() {
+    if(isset($_POST)) {
+        if (isset($_POST['num']) AND isset($_POST['id']) AND $_POST['password']) {
+            $num = $_POST['num'];
+            $id = $_POST['id'];
+            $password = $_POST['password'];
+
+            if($num =='' || $id=='' || $password=='' ) {
+                $error = 'Champs requis';
+            }
+
+            $i=0;
+            $lignes = file("../ressources/private_student.csv");
+            foreach ($lignes as $ligne[]) {
+                $fileContent = explode(',',$ligne[$i]);
+                if($fileContent[0] == $num) {
+                    $error = 'Vous êtes déja inscrit';
+                }
+                $i++;
+            }
+            if(!isset($error)) {
+                $end = null;
+                $crypted = password_hash($password, PASSWORD_BCRYPT);
+                $content = array(
+                    'num'		=>	$num,
+                    'id'	    =>	$id,
+                    'crypted'	=>	$crypted,
+                    $end,
+                );
+                $file = fopen("../ressources/private_student.csv","a");
+                fputcsv($file, $content);
+                fclose($file);
+                $temp = "<p style = 'color:#00FF00'> Session créée </p>";
+            }
+            if(isset($error)) {
+                $temp = "<p style = 'color:#FF0000'> $error </p>";
+            }
+            return $temp;
+        }
+    }
+}
+
+
 //Affichage d'un formulaire de connexion pour un étudiant
 function formLoginStudent() {
     $retour =  '<h2> Connectez-vous : </h2>';
@@ -15,7 +95,7 @@ function formLoginStudent() {
     $retour .= '<td> <input type="password" name="password" value=""> </td>';
     $retour .= '</tr>';
     $retour .= '</table>';
-    $retour .= '<input id="bouton" type="submit" value="Valider" name="submit">';
+    $retour .= '<input id="bouton" type="submit" value="Valider" name="login">';
     $retour .= '</form>';
 
     return $retour;
@@ -32,7 +112,7 @@ function loginStudent() {
             $password = $_POST['password'];
             foreach ($lignes as $ligne[]) {
                 $content = explode(',',$ligne[$i]);
-                if($content[0] == $id && password_verify($password, $content[1])) {
+                if($content[1] == $id && password_verify($password, $content[2])) {
                     session_start();
                     $_SESSION['connected'] = true;
                     $_SESSION['login'] = $id;
@@ -53,6 +133,62 @@ function loginStudent() {
     return $error;
 }
 
+//Affichage d'un formulaire d'upload de photo
+function formUpload(){
+    $retour = '<form method="post" enctype="multipart/form-data">';
+    $retour .= '<table>';
+    $retour .= '<tr>';
+    $retour .= '<td> <label> Prénom : </label> </td>';
+    $retour .= '<td> <input type="text" name="firstname" value=""> </td>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td> <label> Nom : </label> </td>';
+    $retour .= '<td> <input type="text" name="name" value=""> </td>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td> <label for="file" class="label-file"> Choisir une image </label> <input id="file" class="input-file" type="file" name="img"> </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="Valider" name="submit"> </td>';
+    $retour .= '</tr>';
+    $retour .= '</table>';
+    $retour .= '</form>';
+
+    return $retour;
+}
+
+//Upload de la photo d'un étudiant
+function upload(){
+    $retour = "";
+
+    $file = $_FILES['img'];
+    $fileName = $_FILES['img']['name'];
+    $fileTmpName = $_FILES['img']['tmp_name'];
+    $fileSize = $_FILES['img']['size'];
+    $fileError = $_FILES['img']['error'];
+    $fileType = $_FILES['img']['type'];
+
+    $fileExt = explode('.', $fileName);
+
+    $fileActualExt = strtolower(end($fileExt));
+
+    $allowed = array('jpg', 'jpeg', 'png');
+
+    if (in_array($fileActualExt, $allowed)) {
+        if ($fileError === 0) {
+            if ($fileSize < 1000000) {
+                $fileNameNew = uniqid('', true).".".$fileActualExt;
+                $fileDestination = '../uploads/'.$fileNameNew;
+                move_uploaded_file($fileTmpName, $fileDestination);
+                $retour = "Upload réussi !";
+            } else {
+                $retour = "Votre image est trop lourde !";
+            }
+        } else {
+            $retour = "Une erreur est apparue lors de l'upload de votre image !";
+        }
+    } else {
+        $retour = "Vous ne pouvez pas upload des fichiers de ce type !";
+    }
+    return $retour;
+}
+
 ////////////////////////////            PROFESSEURS/SECRETAIRES         ////////////////////////////
 
 //Affichage d'un formulaire de connexion pour un professeur/secrétaire
@@ -68,7 +204,7 @@ function formLoginTeacher() {
     $retour .= '<td> <input type="password" name="password" value=""> </td>';
     $retour .= '</tr>';
     $retour .= '</table>';
-    $retour .= '<input id="bouton" type="submit" value="Valider" name="submit">';
+    $retour .= '<input id="bouton" type="submit" value="Valider" name="login">';
     $retour .= '</form>';
 
     return $retour;
@@ -90,7 +226,7 @@ function loginTeacher() {
                     $_SESSION['connected'] = true;
                     $_SESSION['login'] = $id;
                     $_SESSION['logType'] = 2;
-                    header('location: logged_teacher.php');
+                    header('location: choice_teacher.php');
                     exit();
                 }
                 else {
@@ -104,6 +240,35 @@ function loginTeacher() {
         }
     }
     return $error;
+}
+
+function formClassgroup($mode = 1) {
+    if($mode == 1) {
+        $retour = '<h2> Visualiser les groupes de TD : </h2>';
+    }
+    if($mode == 2) {
+        $retour = '<h2> Organiser les groupes de TD : </h2>';
+    }
+    $retour .= '<table> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Groupe 1 : </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="1"> </td>';
+    $retour .= ' </form> </tr> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Groupe 2 : </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="2"> </td>';
+    $retour .= '</form> </tr> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Groupe 3 : </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="3"> </td>';
+    $retour .= '</form> </tr> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Groupe 4 : </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="4"> </td>';
+    $retour .= '</form> </tr> </table>';
+
+    return $retour;
+
 }
 
 ////////////////////////////            ADMINISTRATEUR          ////////////////////////////
@@ -121,7 +286,7 @@ function formLoginAdministrator() {
     $retour .= '<td> <input type="password" name="password" value=""> </td>';
     $retour .= '</tr>';
     $retour .= '</table>';
-    $retour .= '<input id="bouton" type="submit" value="Valider" name="submit">';
+    $retour .= '<input id="bouton" type="submit" value="Valider" name="login">';
     $retour .= '</form>';
 
     return $retour;
@@ -143,7 +308,7 @@ function loginAdministrator() {
                     $_SESSION['connected'] = true;
                     $_SESSION['login'] = $id;
                     $_SESSION['logType'] = 3;
-                    header('location: logged_administrator.php');
+                    header('location: choice_administrator.php');
                     exit();
                 }
                 else {
@@ -159,10 +324,24 @@ function loginAdministrator() {
     return $error;
 }
 
+function formChoiceAdministrator() {
+    $retour = '<table> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Gérer les filières : </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="group"> </td>';
+    $retour .= ' </form> </tr> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Gérer les sessions : </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="session"> </td>';
+    $retour .= '</form> </tr> </table>';
+
+    return $retour;
+}
+
 //Affichage d'un formulaire de création de session
 function formCreateLogin() {
-    $retour =  '<h2> Nouvelle session :</h2>';
-    $retour = '<form action="#" method = "post">';
+    $retour =  '<h2> Créer une nouvelle session : </h2>';
+    $retour .= '<form action="#" method = "post">';
     $retour .= '<table>';
     $retour .= '<tr>';
     $retour .= '<td> <label> Session : </label> </td>';
@@ -194,15 +373,14 @@ function formCreateLogin() {
     $retour .= '<td> <input type="password" name="password2" value=""> </td>';
     $retour .= '</tr>';
     $retour .= '</table>';
-    $retour .= '<input id="bouton" type="submit" value="Valider" name="submit">';
+    $retour .= '<input id="bouton" type="submit" value="Valider" name="createLogin">';
     $retour .= '</form>';
 
     return $retour;
 }
 
 function createLogin() {
-    $temp = '';
-    if(isset($_POST['submit'])) {
+    if(isset($_POST['createLogin'])) {
         $session = $_POST['session'];
         $firstname = $_POST['firstname'];
         $name = $_POST['name'];
@@ -211,11 +389,11 @@ function createLogin() {
         $password1 = $_POST['password1'];
         $password2 = $_POST['password2'];
 
-        if($session =='' || $firstname=='' || $name=='' || $gender=='' || $id=='' || $password1=='' || $password2=='' ) {
-            $error = 'Champs requis';
-        }
         if($password1 != $password2) {
             $error = 'Les mots de passe ne correspondent pas';
+        }
+        if($session =='' || $firstname=='' || $name=='' || $gender=='' || $id=='' || $password1=='' || $password2=='' ) {
+            $error = 'Champs requis';
         }
 
         if(!isset($error)) {
@@ -237,14 +415,13 @@ function createLogin() {
             }
             fputcsv($file, $content);
             fclose($file);
-            $temp .= "Session créée";
-            $temp .= "<p style = 'color:#00FF00'> $temp </p>";
+            $temp = "<p style = 'color:#00FF00'> Session créée </p>";
         }
+        if(isset($error)) {
+            $temp = "<p style = 'color:#FF0000'> $error </p>";
+        }
+        return $temp;
     }
-    if(isset($error)) {
-        $temp .= "<p style = 'color:#FF0000'> $error </p>";
-    }
-    return $temp;
 }
 
 function formDisconnect(){
