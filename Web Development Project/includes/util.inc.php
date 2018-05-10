@@ -29,7 +29,10 @@ function formRegisterStudent() {
     $retour .= '<td> <input type="text" name="id" value=""> </td>';
     $retour .= '</tr> <tr>';
     $retour .= '<td> <label> Mot de passe : </label> </td>';
-    $retour .= '<td> <input type="password" name="password" value=""> </td>';
+    $retour .= '<td> <input type="password" name="password1" value="" placeholder="8 caractères min."> </td>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td> <label> Confirmer le mot de passe : </label> </td>';
+    $retour .= '<td> <input type="password" name="password2" value=""> </td>';
     $retour .= '</tr>';
     $retour .= '</table>';
     $retour .= '<input id="bouton" type="submit" value="Valider" name="register">';
@@ -41,13 +44,14 @@ function formRegisterStudent() {
 //Authentification d'un étudiant
 function registerStudent() {
     if(isset($_POST)) {
-        if (isset($_POST['num']) AND isset($_POST['id']) AND $_POST['password']) {
+        if (isset($_POST['num']) AND isset($_POST['id']) AND $_POST['password1'] AND $_POST['password2']) {
             $num = $_POST['num'];
             $id = $_POST['id'];
-            $password = $_POST['password'];
+            $password1 = $_POST['password1'];
+            $password2 = $_POST['password2'];
 
-            if($num =='' || $id=='' || $password=='' ) {
-                $error = 'Champs requis';
+            if($num =='' || $id=='' || $password1=='' || $password2=='' ) {
+                $temp = '<p style = "color:#FF0000"> Champs requis </p>';
             }
 
             $i=0;
@@ -60,18 +64,30 @@ function registerStudent() {
                 $i++;
             }
             if(!isset($error)) {
-                $end = null;
-                $crypted = password_hash($password, PASSWORD_BCRYPT);
-                $content = array(
-                    'num'		=>	$num,
-                    'id'	    =>	$id,
-                    'crypted'	=>	$crypted,
-                    $end,
-                );
-                $file = fopen("../ressources/private_student.csv","a");
-                fputcsv($file, $content);
-                fclose($file);
-                $temp = "<p style = 'color:#00FF00'> Session créée </p>";
+                if (is_numeric($num)) {
+                    if(strlen($password1) >= 8){
+                        if($password1 === $password2){
+                            $end = null;
+                            $crypted = password_hash($password1, PASSWORD_BCRYPT);
+                            $content = array(
+                                'num'		=>	$num,
+                                'id'	    =>	$id,
+                                'crypted'	=>	$crypted,
+                                $end,
+                            );
+                            $file = fopen("../ressources/private_student.csv","a");
+                            fputcsv($file, $content);
+                            fclose($file);
+                            $temp = "<p style = 'color:#00FF00'> Session créée </p>";
+                        } else {
+                            $temp = "<p style = 'color:#FF0000'> Les mots de passe ne sont pas identiques ! </p>";
+                        }
+                    } else {
+                        $temp = "<p style = 'color:#FF0000'> Le mot de passe est trop court </p>";
+                    }
+                } else {
+                    $temp = "<p style = 'color:#FF0000'> Le numéro étudiant ne doit être composé que de chiffres ! </p>";
+                }
             }
             if(isset($error)) {
                 $temp = "<p style = 'color:#FF0000'> $error </p>";
@@ -144,48 +160,62 @@ function formUpload(){
     $retour .= '<td> <label> Nom : </label> </td>';
     $retour .= '<td> <input type="text" name="name" value=""> </td>';
     $retour .= '</tr> <tr>';
-    $retour .= '<td> <label for="file" class="label-file"> Choisir une image </label> <input id="file" class="input-file" type="file" name="img"> </td>';
-    $retour .= '<td> <input id="bouton" type="submit" value="Valider" name="submit"> </td>';
+    $retour .= '<td colspan="2"> <input id="real-file" hidden="hidden" type="file" name="img" /> <button type="button" id="custom-button">Choisir une image</button> <span id="custom-text">Aucune image choisie.</span></td>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td colspan=2> <input id="bouton" type="submit" value="Valider" name="submit"> </td>';
     $retour .= '</tr>';
     $retour .= '</table>';
     $retour .= '</form>';
-
     return $retour;
 }
-
-//Upload de la photo d'un étudiant
 function upload(){
     $retour = "";
-
+    $end = null;
+// Varibles pour le prénom et le nom
+    $firstname = $_POST['firstname'];
+    $name = $_POST['name'];
+// Partie concernant l'image
     $file = $_FILES['img'];
     $fileName = $_FILES['img']['name'];
     $fileTmpName = $_FILES['img']['tmp_name'];
     $fileSize = $_FILES['img']['size'];
     $fileError = $_FILES['img']['error'];
     $fileType = $_FILES['img']['type'];
-
     $fileExt = explode('.', $fileName);
-
     $fileActualExt = strtolower(end($fileExt));
-
     $allowed = array('jpg', 'jpeg', 'png');
-
-    if (in_array($fileActualExt, $allowed)) {
-        if ($fileError === 0) {
-            if ($fileSize < 1000000) {
-                $fileNameNew = uniqid('', true).".".$fileActualExt;
-                $fileDestination = '../uploads/'.$fileNameNew;
-                move_uploaded_file($fileTmpName, $fileDestination);
-                $retour = "Upload réussi !";
+    if (($firstname != null) AND ($name != null) AND ($fileName != null)) {
+        if (in_array($fileActualExt, $allowed)) {
+            if ($fileError === 0) {
+                if ($fileSize < 1000000) {
+                    $fileNameNew = uniqid('', true).".".$fileActualExt;
+                    $fileDestination = '../uploads/'.$fileNameNew;
+                    // Partie concernant le nom et le prénom
+                    $content = array(
+                        'firstname'	=>	$firstname,
+                        'name'		=>	$name,
+                        'img'	=>	$fileNameNew,
+                        $end,
+                    );
+                        $file = fopen("../ressources/info_student.csv","a");
+                        fputcsv($file, $content);
+                        fclose($file);
+                    // Fin de la Partie concernant le nom et le prénom
+                    move_uploaded_file($fileTmpName, $fileDestination);
+                    $retour = "Upload réussi !";
+                } else {
+                    $retour = "Votre image est trop lourde !";
+                }
             } else {
-                $retour = "Votre image est trop lourde !";
+                $retour = "Une erreur est apparue lors de l'upload de votre image !";
             }
         } else {
-            $retour = "Une erreur est apparue lors de l'upload de votre image !";
+                $retour = "Vous ne pouvez pas upload des fichiers de ce type !";
         }
     } else {
-        $retour = "Vous ne pouvez pas upload des fichiers de ce type !";
+        $retour = "Veuillez renseignez un nom, un prénom, ainsi qu'une image !";
     }
+    // Fin de la partie concernant l'image
     return $retour;
 }
 
@@ -430,86 +460,4 @@ function formDisconnect(){
     $retour .= '</form>';
 }
 
-
-function formUpload(){
-    $retour = '<form method="post" enctype="multipart/form-data">';
-    $retour .= '<table>';
-    $retour .= '<tr>';
-    $retour .= '<td> <label> Prénom : </label> </td>';
-    $retour .= '<td> <input type="text" name="firstname" value=""> </td>';
-    $retour .= '</tr> <tr>';
-    $retour .= '<td> <label> Nom : </label> </td>';
-    $retour .= '<td> <input type="text" name="name" value=""> </td>';
-    $retour .= '</tr> <tr>';
-    $retour .= '<td colspan="2"> <input id="real-file" hidden="hidden" type="file" name="img" /> <button type="button" id="custom-button">Choisir une image</button> <span id="custom-text">Aucune image choisie.</span></td>';
-    $retour .= '</tr> <tr>';
-    $retour .= '<td colspan=2> <input id="bouton" type="submit" value="Valider" name="submit"> </td>';
-    $retour .= '</tr>';
-    $retour .= '</table>';
-    $retour .= '</form>';
-
-    return $retour;
-}
-
-
-function upload(){
-    $retour = "";
-    $end = null;
-// Varibles pour le prénom et le nom
-    $firstname = $_POST['firstname'];
-    $name = $_POST['name'];
-
-// Partie concernant l'image
-    $file = $_FILES['img'];
-    $fileName = $_FILES['img']['name'];
-    $fileTmpName = $_FILES['img']['tmp_name'];
-    $fileSize = $_FILES['img']['size'];
-    $fileError = $_FILES['img']['error'];
-    $fileType = $_FILES['img']['type'];
-
-    $fileExt = explode('.', $fileName);
-
-    $fileActualExt = strtolower(end($fileExt));
-
-    $allowed = array('jpg', 'jpeg', 'png');
-
-    if (($firstname != null) AND ($name != null) AND ($fileName != null)) {
-        if (in_array($fileActualExt, $allowed)) {
-            if ($fileError === 0) {
-                if ($fileSize < 1000000) {
-                    $fileNameNew = uniqid('', true).".".$fileActualExt;
-                    $fileDestination = '../uploads/'.$fileNameNew;
-
-                    // Partie concernant le nom et le prénom
-                    $content = array(
-                        'firstname'	=>	$firstname,
-                        'name'		=>	$name,
-                        'img'	=>	$fileNameNew,
-                        $end,
-                    );
-
-                        $file = fopen("../ressources/info_student.csv","a");
-                        fputcsv($file, $content);
-                        fclose($file);
-                    // Fin de la Partie concernant le nom et le prénom
-
-                    move_uploaded_file($fileTmpName, $fileDestination);
-                    $retour = "Upload réussi !";
-                } else {
-                    $retour = "Votre image est trop lourde !";
-                }
-            } else {
-                $retour = "Une erreur est apparue lors de l'upload de votre image !";
-            }
-        } else {
-                $retour = "Vous ne pouvez pas upload des fichiers de ce type !";
-        }
-    } else {
-        $retour = "Veuillez renseignez un nom, un prénom, ainsi qu'une image !";
-    }
-
-    // Fin de la partie concernant l'image
-
-    return $retour;
-}
 ?>

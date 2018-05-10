@@ -162,11 +162,12 @@ footer a {
 
 #custom-button {
 	padding: 10px;
-	color: white;
+	color: black;
 	background-color: #efefef;
 	cursor: pointer;
 }
 
 #custom-button:hover{
+	transition-duration: 0.5s;
 	background-color: #00b28f;
 }
