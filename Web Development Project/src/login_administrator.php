@@ -17,7 +17,9 @@ echo display_header("Connexion Administrateurs", "../styles/style_logpages.css")
 		<?php
 		$temp = "<p style = 'color:#FF0000'> $temp </p>";
 		echo formLoginAdministrator();
-		echo $temp;
+		if(isset($_POST['login'])) {
+			echo $temp;
+		}
 		?>
 	</article>
 </section>

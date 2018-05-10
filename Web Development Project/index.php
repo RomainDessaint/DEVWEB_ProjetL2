@@ -14,7 +14,7 @@ echo display_header("ENT - Accueil", "styles/style_index.css");
 	?>
 
 	<article>
-		<a href="src/login_student.php"> <h2> ESPACE ETUDIANTS </h2> </a>
+		<a href="src/choice_student.php"> <h2> ESPACE ETUDIANTS </h2> </a>
 	</article>
 	<article>
 		<a href="src/login_teacher.php"> <h2> ESPACE PROFESSEURS </h2> </a>

@@ -18,7 +18,9 @@ echo display_header("Connexion Professeurs", "../styles/style_logpages.css");
 		<?php
      	$temp = "<p style = 'color:#FF0000'> $temp </p>";
 		echo formLoginTeacher();
-		echo $temp;
+		if(isset($_POST['login'])) {
+			echo $temp;
+		}
 		?>
 
 	</article>
