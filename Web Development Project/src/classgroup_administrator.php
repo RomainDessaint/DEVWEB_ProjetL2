@@ -19,7 +19,7 @@ echo display_header("Espace gestionnaires", "../styles/style_logpages.css");
 	<article>
 
 		<?php
-		echo formClassgroup(2);
+		echo formRepertoryCreator();
 
 		if (isset($_POST['submitFiliere']) && empty($_POST['submitGroupe'])){
 			echo repertoryCreator();

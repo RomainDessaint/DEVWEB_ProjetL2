@@ -168,6 +168,7 @@ function formUpload(){
     $retour .= '</form>';
     return $retour;
 }
+
 function upload(){
     $retour = "";
     $end = null;
@@ -272,88 +273,7 @@ function loginTeacher() {
     return $error;
 }
 
-function formClassgroup($mode = 1) {
-
-    if($mode == 1) {
-        $retour = '<h2> Visualiser les groupes de TD : </h2>';
-    }
-    if($mode == 2) {
-        $retour = '<h2> Organiser les groupes de TD : </h2>';
-    }
-    $retour .= '<table> <tr>';
-    $retour .= '<form action="#" method="post">';
-    $retour .= '<td> Créez une filière : </td>';
-    $retour .= '<td> <input id="bouton" type="text" value="" name="filiere"> </td>';
-    $retour .= '<td colspan="3" style="text-align: left;"> <input id="bouton" type="submit" value="OK" name="submitFiliere"> </td>';
-    $retour .= '</tr> <tr>';
-    $retour .= '<td> Si déjà créée, choisissez la ici : </td>';
-    $retour .= '<td> <select id="bouton" name="choix">';
-    $retour .= '<option value="" selected="selected"> Aucune </option>';
-        $dir = directoryReading();
-        $i = 0;
-        foreach ($dir as $directories[$i]) {
-            $retour .= '<option value="'.$directories[$i].'">'.$directories[$i].'</option>';
-            $i++;
-        }
-	$retour .= '</select> </td> </tr>';
-    $retour .= '<tr>';
-    $retour .= '<td> Puis créez un groupe : </td>';
-    $retour .= '<td> <input id="bouton" type="text" value="" name="groupe"> </td>';
-    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="submitGroupe"> </td>';
-    $retour .= '</tr>';
-    $retour .= '</table>';
-
-    return $retour;
-
-}
-
 ////////////////////////////            ADMINISTRATEUR          ////////////////////////////
-
-function repertoryCreator(){
-
-    $filiere = $_POST['filiere'];
-    $groupe = $_POST['groupe'];
-    $choix = $_POST['choix'];
-    $retour = "";
-    $i = 0;
-
-    if (isset($_POST['submitFiliere']) && empty($_POST['submitGroupe'])) {
-        if ($filiere != ""){
-            $dir = directoryReading();
-            foreach ($dir as $directories[]) {
-                if ($directories[$i] == $filiere) {
-                    return '<p style="color: #FF0000"> Ce nom de filière existe déjà </p>';
-                }
-                $i++;
-            }
-            mkdir("../Admin/$filiere", 0700);
-            $retour = '<p style="color: #00FF00"> La filière a bien été créée ! </p>';
-
-        } else {
-            $retour = '<p style="color: #FF0000"> Veuillez renseigner un nom de filière !';
-        }
-    }
-    if (isset($_POST['submitGroupe']) && empty($_POST['submitFiliere']) && isset($_POST['choix'])) {
-        if ($groupe != ""){
-            if($choix != ""){
-                $dir = directoryReading("Admin/$choix");
-                foreach ($dir as $directories[]) {
-                    if ($directories[$i] == $groupe) {
-                        return '<p style="color: #FF0000"> Ce nom de groupe existe déjà </p>';
-                    }
-                    $i++;
-                }
-                mkdir("../Admin/$choix/$groupe", 0700);
-                $retour = '<p style="color: #00FF00"> Le groupe a bien été créé ! </p>';
-            } else {
-                $retour = '<p style="color: #FF0000"> Veuillez renseigner une filière ! </p>';
-            }
-        } else {
-            $retour = '<p style="color: #FF0000"> Veuillez renseigner un nom de groupe ! </p>';
-        }
-    }
-    return $retour;
-}
 
 //Affichage d'un formulaire de connexion pour un administrateur
 function formLoginAdministrator() {
@@ -506,14 +426,82 @@ function createLogin() {
     }
 }
 
-function formDisconnect(){
-    $retour = '<form action>';
-    $retour .= '<input id="bouton" type="submit" value="deconnecter" name="disconect">';
-    $retour .= '</form>';
+function formRepertoryCreator() {
+    $retour = '<table> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Créez une filière : </td>';
+    $retour .= '<td> <input id="bouton" type="text" value="" name="filiere"> </td>';
+    $retour .= '<td colspan="3" style="text-align: left;"> <input id="bouton" type="submit" value="OK" name="submitFiliere"> </td>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td> Selectionnez une filière : </td>';
+    $retour .= '<td> <select id="bouton" name="choix">';
+    $retour .= '<option value="" selected="selected"> Aucune </option>';
+        $dir = directoryReading();
+        $i = 0;
+        foreach ($dir as $directories[$i]) {
+            $retour .= '<option value="'.$directories[$i].'">'.$directories[$i].'</option>';
+            $i++;
+        }
+	$retour .= '</select> </td> </tr>';
+    $retour .= '<tr>';
+    $retour .= '<td> Créez un groupe : </td>';
+    $retour .= '<td> <input id="bouton" type="text" value="" name="groupe"> </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="submitGroupe"> </td>';
+    $retour .= '</tr>';
+    $retour .= '</table>';
+
+    return $retour;
+
+}
+
+//Fonction permettant la création des filières
+function repertoryCreator(){
+
+    $filiere = $_POST['filiere'];
+    $groupe = $_POST['groupe'];
+    $choix = $_POST['choix'];
+    $retour = "";
+    $i = 0;
+
+    if (isset($_POST['submitFiliere']) && empty($_POST['submitGroupe'])) {
+        if ($filiere != ""){
+            $dir = directoryReading();
+            foreach ($dir as $directories[]) {
+                if ($directories[$i] == $filiere) {
+                    return '<p style="color: #FF0000"> Ce nom de filière existe déjà </p>';
+                }
+                $i++;
+            }
+            mkdir("../Admin/$filiere", 0700);
+            $retour = '<p style="color: #00FF00"> La filière a bien été créée ! </p>';
+
+        } else {
+            $retour = '<p style="color: #FF0000"> Veuillez renseigner un nom de filière !';
+        }
+    }
+    if (isset($_POST['submitGroupe']) && empty($_POST['submitFiliere']) && isset($_POST['choix'])) {
+        if ($groupe != ""){
+            if($choix != ""){
+                $dir = directoryReading("Admin/$choix");
+                foreach ($dir as $directories[]) {
+                    if ($directories[$i] == $groupe) {
+                        return '<p style="color: #FF0000"> Ce nom de groupe existe déjà </p>';
+                    }
+                    $i++;
+                }
+                mkdir("../Admin/$choix/$groupe", 0700);
+                $retour = '<p style="color: #00FF00"> Le groupe a bien été créé ! </p>';
+            } else {
+                $retour = '<p style="color: #FF0000"> Veuillez renseigner une filière ! </p>';
+            }
+        } else {
+            $retour = '<p style="color: #FF0000"> Veuillez renseigner un nom de groupe ! </p>';
+        }
+    }
+    return $retour;
 }
 
 // Fonction permettant la lecture des dossiers
-
 function directoryReading($directory = "Admin"){
     $nb_fichier = 0;
     $dir[] = "";
