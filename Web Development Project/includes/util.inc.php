@@ -52,7 +52,7 @@ function registerStudent() {
             $password2 = $_POST['password2'];
 
             if($num =='' || $id=='' || $password1=='' || $password2=='' ) {
-                $temp = '<p style = "color:#FF0000"> Champs requis </p>';
+                $error = 'Remplissez les champs requis';
             }
 
             $i=0;
@@ -150,10 +150,54 @@ function loginStudent() {
     return $error;
 }
 
-//Affichage d'un formulaire de mise en ligne de photo
+//Affichage d'un formulaire d'upload de photo
 function formUpload(){
     $retour = '<form method="post" enctype="multipart/form-data">';
     $retour .= '<table>';
+    $retour .= '<tr>';
+    $retour .= '<th> Filières </th>';
+    $retour .= '<th> Groupes </th>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td> <select id="list" onchange="getSelectValue();">';
+    $retour .= '<option value="" selected="selected"> Choisissez une filière </option>';
+
+    $dir = directoryReading();
+    $i = 0;
+    foreach ($dir as $directories[$i]) {
+        $retour .= '<option ';
+        if(isset($_GET["filiere"]) && $_GET["filiere"] == $directories[$i]){
+            $retour .= 'selected="selected"';
+        }
+        $retour .= 'value="'.$directories[$i].'">'.$directories[$i].'</option>';
+        $i++;
+    }
+
+    $retour .= '</select> </td>';
+
+    $retour .= '<script>
+
+    function getSelectValue(){
+        var selectedValue = document.getElementById("list").value;
+        window.location.href="logged_student.php?filiere="+selectedValue;
+    }
+
+    </script>';
+
+    $retour .= '<td> <select name="selectGroupes">';
+    $retour .= '<option value="" selected="selected"> Choisissez un groupe </option>';
+
+    if(isset($_GET["filiere"])){
+        $listChoice = $_GET["filiere"];
+        $dir2 = directoryReading("Admin/$listChoice");
+        $j = 0;
+        foreach ($dir2 as $directories[$j]) {
+            $retour .= '<option value="'.$directories[$j].'">'.$directories[$j].'</option>';
+            $j++;
+        }
+    }
+
+    $retour .= '</select>';
+    $retour .= '</tr>';
     $retour .= '<tr>';
     $retour .= '<td> <label> Prénom : </label> </td>';
     $retour .= '<td> <input type="text" name="firstname" value=""> </td>';
@@ -170,7 +214,6 @@ function formUpload(){
     return $retour;
 }
 
-//Fonction de mise en ligne d'image par un étudiant
 function upload(){
     $retour = "";
     $end = null;
@@ -197,7 +240,7 @@ function upload(){
                     $content = array(
                         'firstname'	=>	$firstname,
                         'name'		=>	$name,
-                        'img'	=>	$fileNameNew,
+                        'img'		=>	$fileNameNew,
                         $end,
                     );
                     $file = fopen("../ressources/info_student.csv","a");
@@ -571,32 +614,57 @@ function repertoryCreator(){
     $choix = $_POST['choix'];
     $retour = "";
     $i = 0;
-
+    $j = 0;
+    $not_allowed = array("\\", "/", ":", "*", "?", "\"", ">", "<", "|", ".");
+    $count = count($not_allowed);
     if (isset($_POST['submitFiliere']) && empty($_POST['submitGroupe'])) {
         if ($filiere != ""){
+            for($i; $i<$count; $i++){
+                $pos = strpos($filiere, $not_allowed[$i]);
+                if ($pos !== false) {
+                    $retour = '<p style="color: #FF0000;"> Veuillez utiliser des caractères autres que :';
+                    foreach ($not_allowed as $print) {
+                        $retour .= " $print";
+                    }
+                    return $retour;
+                }
+            }
+
             $dir = directoryReading();
             foreach ($dir as $directories[]) {
-                if ($directories[$i] == $filiere) {
+                if ($directories[$j] == $filiere) {
                     return '<p style="color: #FF0000"> Ce nom de filière existe déjà </p>';
                 }
-                $i++;
+                $j++;
             }
             mkdir("../Admin/$filiere", 0700);
-            $retour = '<p style="color: #00FF00"> La filière a bien été créée ! </p>';
-
+            echo "<script>alert(\"La filière a bien été créée !\")</script>";
+            header('Refresh: 0.5;URL=classgroup_administrator.php');
         } else {
             $retour = '<p style="color: #FF0000"> Veuillez renseigner un nom de filière !';
         }
     }
+
+
     if (isset($_POST['submitGroupe']) && empty($_POST['submitFiliere']) && isset($_POST['choix'])) {
         if ($groupe != ""){
             if($choix != ""){
+                for($i; $i<$count; $i++){
+                    $pos = strpos($filiere, $not_allowed[$i]);
+                    if ($pos !== false) {
+                        $retour = '<p style="color: #FF0000;"> Veuillez utiliser des caractères autres que :';
+                        foreach ($not_allowed as $print) {
+                            $retour .= " $print";
+                        }
+                        return $retour;
+                    }
+                }
                 $dir = directoryReading("Admin/$choix");
                 foreach ($dir as $directories[]) {
-                    if ($directories[$i] == $groupe) {
+                    if ($directories[$j] == $groupe) {
                         return '<p style="color: #FF0000"> Ce nom de groupe existe déjà </p>';
                     }
-                    $i++;
+                    $j++;
                 }
                 mkdir("../Admin/$choix/$groupe", 0700);
                 $retour = '<p style="color: #00FF00"> Le groupe a bien été créé ! </p>';

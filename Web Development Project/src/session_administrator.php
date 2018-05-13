@@ -13,6 +13,12 @@ if(isset($_POST['newsession'])) {
 	exit();
 }
 
+for($i=0; $i<3; $i++) {
+	if(isset($POST['modifyadmin'.$i])) {
+
+	}
+}
+
 echo display_header("Espace gestionnaires", "../styles/style_sessionpages.css");
 ?>
 

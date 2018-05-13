@@ -19,26 +19,24 @@ echo display_header("Espace Etudiants", "../styles/style_logpages.css");
      <article>
           <?php
               echo formUpload();
-              if (isset($_POST['submit'])) {
           ?>
               <script type="text/javascript">
-
               var rules = {a:"àáâãäå",
-                			A:"ÀÁÂ",
-                			e:"èéêë",
-                			E:"ÈÉÊË",
-                			i:"ìíîï",
-                			I:"ÌÍÎÏ",
-                			o:"òóôõöø",
-                			O:"ÒÓÔÕÖØ",
-                			u:"ùúûü",
-                			U:"ÙÚÛÜ",
-                			y:"ÿ",
-                			c: "ç",
-                			C:"Ç",
-                			n:"ñ",
-                			N:"Ñ"
-			  };
+                           A:"ÀÁÂ",
+                           e:"èéêë",
+                           E:"ÈÉÊË",
+                           i:"ìíîï",
+                           I:"ÌÍÎÏ",
+                           o:"òóôõöø",
+                           O:"ÒÓÔÕÖØ",
+                           u:"ùúûü",
+                           U:"ÙÚÛÜ",
+                           y:"ÿ",
+                           c: "ç",
+                           C:"Ç",
+                           n:"ñ",
+                           N:"Ñ"
+             };
               function  getJSONKey(key){
                   for (acc in rules){
                       if (rules[acc].indexOf(key)>-1){return acc}
@@ -51,8 +49,8 @@ echo display_header("Espace Etudiants", "../styles/style_logpages.css");
                     regstring+=rules[acc]
                   }
                   reg=new RegExp("["+regstring+"]","g" )
-		              return Texte.replace(reg,function(t){ return getJSONKey(t) });
- 	          }
+                     return Texte.replace(reg,function(t){ return getJSONKey(t) });
+             }
 
               const realFileBtn = document.getElementById("real-file");
               const customBtn = document.getElementById("custom-button");
@@ -72,7 +70,8 @@ echo display_header("Espace Etudiants", "../styles/style_logpages.css");
               });
               </script>
           <?php
-               echo upload();
+              if (isset($_POST['submit'])) {
+              echo upload();
           }
           ?>
      </article>
