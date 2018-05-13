@@ -95,6 +95,10 @@ table.content td, table.content th {
 	min-width: 200px;
 }
 
+td.big, th.big {
+	min-width: 500px;
+}
+
 footer {
 	width: 98%;
 	margin: auto;

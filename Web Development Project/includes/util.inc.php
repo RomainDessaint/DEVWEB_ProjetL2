@@ -44,60 +44,50 @@ function formRegisterStudent() {
 
 //Fonction d'inscription pour un étudiant
 function registerStudent() {
-    if(isset($_POST)) {
-        if (isset($_POST['num']) AND isset($_POST['id']) AND $_POST['password1'] AND $_POST['password2']) {
-            $num = $_POST['num'];
-            $id = $_POST['id'];
-            $password1 = $_POST['password1'];
-            $password2 = $_POST['password2'];
+    if (isset($_POST['num']) AND isset($_POST['id']) AND $_POST['password1'] AND $_POST['password2']) {
+        $num = $_POST['num'];
+        $id = $_POST['id'];
+        $password1 = $_POST['password1'];
+        $password2 = $_POST['password2'];
 
-            if($num =='' || $id=='' || $password1=='' || $password2=='' ) {
-                $error = 'Remplissez les champs requis';
+        $i=0;
+        $lignes = file("../ressources/private_student.csv");
+        foreach ($lignes as $ligne[]) {
+            $fileContent = explode(',',$ligne[$i]);
+            if($fileContent[0] == $num) {
+                return '<p style = "color:#FF0000"> Vous êtes déjà inscrit ! </p>';
             }
-
-            $i=0;
-            $lignes = file("../ressources/private_student.csv");
-            foreach ($lignes as $ligne[]) {
-                $fileContent = explode(',',$ligne[$i]);
-                if($fileContent[0] == $num) {
-                    $error = 'Vous êtes déja inscrit';
-                }
-                $i++;
-            }
-            if(!isset($error)) {
-                if (is_numeric($num)) {
-                    if(strlen($password1) >= 8){
-                        if($password1 === $password2){
-                            $end = null;
-                            $crypted = password_hash($password1, PASSWORD_BCRYPT);
-                            $content = array(
-                                'num'		=>	$num,
-                                'id'	    =>	$id,
-                                'crypted'	=>	$crypted,
-                                $end,
-                            );
-                            $file = fopen("../ressources/private_student.csv","a");
-                            fputcsv($file, $content);
-                            fclose($file);
-                            $temp = "<p style = 'color:#00FF00'> Session créée </p>";
-                        } else {
-                            $temp = "<p style = 'color:#FF0000'> Les mots de passe ne sont pas identiques ! </p>";
-                        }
-                    } else {
-                        $temp = "<p style = 'color:#FF0000'> Le mot de passe est trop court </p>";
-                    }
-                } else {
-                    $temp = "<p style = 'color:#FF0000'> Le numéro étudiant ne doit être composé que de chiffres ! </p>";
-                }
-            }
-            if(isset($error)) {
-                $temp = "<p style = 'color:#FF0000'> $error </p>";
-            }
-            return $temp;
+            $i++;
         }
+        if (is_numeric($num)) {
+            if(strlen($password1) >= 8){
+                if($password1 === $password2){
+                    $end = null;
+                    $crypted = password_hash($password1, PASSWORD_BCRYPT);
+                    $content = array(
+                        'num'		=>	$num,
+                        'id'	    =>	$id,
+                        'crypted'	=>	$crypted,
+                        $end,
+                    );
+                    $file = fopen("../ressources/private_student.csv","a");
+                    fputcsv($file, $content);
+                    fclose($file);
+                    $temp = "<p style = 'color:#00FF00'> Session créée </p>";
+                } else {
+                    $temp = "<p style = 'color:#FF0000'> Les mots de passe ne sont pas identiques ! </p>";
+                }
+            } else {
+                $temp = "<p style = 'color:#FF0000'> Le mot de passe est trop court </p>";
+            }
+        } else {
+            $temp = "<p style = 'color:#FF0000'> Le numéro étudiant ne doit être composé que de chiffres ! </p>";
+        }
+    } else {
+        $temp = '<p style = "color:#FF0000"> Champs requis </p>';
     }
+    return $temp;
 }
-
 
 //Affichage d'un formulaire de connexion pour un étudiant
 function formLoginStudent() {
@@ -152,7 +142,7 @@ function loginStudent() {
 
 //Affichage d'un formulaire d'upload de photo
 function formUpload(){
-    $retour = '<form method="post" enctype="multipart/form-data">';
+    $retour = '<form method="post" enctype="multipart/form-data" action="logged_student.php#">';
     $retour .= '<table>';
     $retour .= '<tr>';
     $retour .= '<th> Filières </th>';
@@ -165,7 +155,7 @@ function formUpload(){
     $i = 0;
     foreach ($dir as $directories[$i]) {
         $retour .= '<option ';
-        if(isset($_GET["filiere"]) && $_GET["filiere"] == $directories[$i]){
+        if(isset($_GET["filiere"]) && $_GET["filiere"] == $directories[$i] && !isset($_POST['submit'])){
             $retour .= 'selected="selected"';
         }
         $retour .= 'value="'.$directories[$i].'">'.$directories[$i].'</option>';
@@ -248,7 +238,7 @@ function upload(){
                     fclose($file);
                     // Fin de la Partie concernant le nom et le prénom
                     move_uploaded_file($fileTmpName, $fileDestination);
-                    $retour = "Upload réussi !";
+                    $retour = "<p style='color: #00FF00;'> Upload réussi ! </p>";
                 } else {
                     $retour = "Votre image est trop lourde !";
                 }
@@ -400,7 +390,7 @@ function displaySessions() {
     $retour .= '<table class="content">';
     $retour .= '<tr> <td colspan="5" style="text-align: center;"> Sessions administrateurs </td> </tr>';
 
-    if(fileSize("../ressources/private_administrator.csv") < 100) {
+    if(fileSize("../ressources/private_administrator.csv") < 70) {
         $retour .= '<tr> <td colspan="5" style="text-align: center;"> Aucune session administrateur </td> </tr>';
     }
     else {
@@ -432,8 +422,8 @@ function displaySessions() {
     $teacherLignes = file("../ressources/private_teacher.csv");
     $retour .= '<table class="content">';
     $retour .= '<tr> <td colspan="5" style="text-align: center;"> Sessions secretaires </td> </tr>';
-    if(fileSize("../ressources/private_teacher.csv") < 100) {
-        $retour .= '<tr> <td colspan="5" style="text-align: center;"> Aucune session secrétaire </td> </tr>';
+    if(fileSize("../ressources/private_teacher.csv") < 70) {
+        $retour .= '<tr> <td colspan="5" style="text-align: center;" class="big"> Aucune session secrétaire </td> </tr>';
     }
     else {
         $j = 0;
@@ -448,11 +438,11 @@ function displaySessions() {
             }
             else {
                 $teacherContent = explode(',',$teacherLigne[$j]);
-                $retour .= '<tr> <td style="text-align:center;">' .$adminContent[1] .'</td>';
-                $retour .= '<td style="text-align:center;">' .$adminContent[0] .'</td>';
+                $retour .= '<tr> <td style="text-align:center;">' .$teacherContent[1] .'</td>';
+                $retour .= '<td style="text-align:center;">' .$teacherContent[0] .'</td>';
                 $retour .= '<td style="text-align:center;">' .$teacherContent[3] .'</td>';
-                $retour .= '<td style="text-align: center;"> <input id="bouton" type="submit" value="Modifier" name="modifyadmin'.$i.'"> </td>';
-                $retour .= '<td style="text-align: center;"> <input id="bouton" type="submit" value="Supprimer" name="deleteadmin'.$i.'"> </td>';
+                $retour .= '<td style="text-align: center;"> <input id="bouton" type="submit" value="Modifier" name="modifyteacher'.$j.'"> </td>';
+                $retour .= '<td style="text-align: center;"> <input id="bouton" type="submit" value="Supprimer" name="deleteteacher'.$j.'"> </td>';
                 $retour .= '</tr>';
                 $j++;
             }
@@ -550,9 +540,73 @@ function createLogin() {
     }
 }
 
+//Fonction permettant de compter le nombre de sessions
+function countSession($sessionType) {
+    if($sessionType == 1) {
+        if(fileSize("../ressources/private_administrator.csv") < 70) {
+            $error = 'Erreur lors de la supression de la session';
+        }
+        else {
+
+        }
+    }
+    else if($sessionType == 2) {
+        if(fileSize("../ressources/private_teacher.csv") < 70) {
+            $error = 'Erreur lors de la supression de la session';
+        }
+        else {
+        }
+    }
+}
+
+//Fonction de suppression de session
+function deleteSession($session, $sessionType) {
+    if($sessionType == 1) {
+        if(fileSize("../ressources/private_administrator.csv") < 70) {
+            $error = 'Erreur lors de la supression de la session';
+        }
+        else {
+            $file = fopen("../ressources/private_administrator.csv", "r");
+            $fileContent = fread($file, filesize("../ressources/private_administrator.csv"));
+            fclose($file);
+            $fileContent = explode(PHP_EOL, $fileContent);
+            unset($fileContent[$session]);
+            $fileContent = array_values($fileContent);
+            $fileContent = implode(PHP_EOL, $fileContent);
+            $file = fopen("../ressources/private_administrator.csv", "w");
+            fwrite($file, $fileContent);
+            $retour = 'Session supprimée !';
+        }
+    }
+    else if($sessionType == 2) {
+        if(fileSize("../ressources/private_teacher.csv") < 70) {
+            $error = 'Erreur lors de la supression de la session';
+        }
+        else {
+            $file = fopen("../ressources/private_teacher.csv", "r");
+            $fileContent = fread($file, filesize("../ressources/private_teacher.csv"));
+            fclose($file);
+            $fileContent = explode(PHP_EOL, $fileContent);
+            unset($fileContent[$session]);
+            $fileContent = array_values($fileContent);
+            $fileContent = implode(PHP_EOL, $fileContent);
+            $file = fopen("../ressources/private_teacher.csv", "w");
+            fwrite($file, $fileContent);
+            $retour = 'Session supprimée !';
+        }
+    }
+    if(isset($error)) {
+        $retour = '<p style="color: #FF0000;">' .$error .'</p>';
+    }
+    else if(!isset($error)) {
+        $retour = '<p style="color: #00FF00;">' .$retour .'</p>';
+    }
+    return $retour;
+}
+
 //Fonction permettant l'affichage de l'arborescence des filières et des groupes
 function displayFilieres() {
-    $retour = '<h2> Aperçu de l\'arborescense des filières </h2>';
+    $retour = '<h2> Aperçu des filières et des groupes </h2>';
     $root = "Admin";
     $filieres = directoryReading($root);
     $retour .= '<table>';
@@ -577,11 +631,9 @@ function displayFilieres() {
 
 //Affichage d'un formulaire de création de filière ou de groupe
 function formRepertoryCreator() {
-    $retour = '<table> <tr>';
+    $retour = '<h2> Organisation des groupes de TD </h2>';
+    $retour .= '<table> <tr>';
     $retour .= '<form action="#" method="post">';
-    $retour .= '<td> Afficher l\'arborescense des filières : </td>';
-    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="submitArborescence"> </td>';
-    $retour .= '</tr> <tr>';
     $retour .= '<td> Créez une filière : </td>';
     $retour .= '<td> <input id="bouton" type="text" value="" name="filiere"> </td>';
     $retour .= '<td> <input id="bouton" type="submit" value="OK" name="submitFiliere"> </td>';
@@ -592,7 +644,8 @@ function formRepertoryCreator() {
     $dir = directoryReading();
     $i = 0;
     foreach ($dir as $directories[$i]) {
-        $retour .= '<option value="'.$directories[$i].'">'.$directories[$i].'</option>';
+        if($directories[$i] != null)
+            $retour .= '<option value="'.$directories[$i].'">'.$directories[$i].'</option>';
         $i++;
     }
     $retour .= '</select> </td> </tr>';
@@ -603,6 +656,8 @@ function formRepertoryCreator() {
     $retour .= '</tr>';
     $retour .= '</form>';
     $retour .= '</table>';
+
+    $retour .= displayFilieres();
 
     return $retour;
 }
@@ -639,7 +694,7 @@ function repertoryCreator(){
             }
             mkdir("../Admin/$filiere", 0700);
             echo "<script>alert(\"La filière a bien été créée !\")</script>";
-            header('Refresh: 0.5;URL=classgroup_administrator.php');
+            header('Refresh: 0.1;URL=classgroup_administrator.php');
         } else {
             $retour = '<p style="color: #FF0000"> Veuillez renseigner un nom de filière !';
         }
@@ -667,7 +722,8 @@ function repertoryCreator(){
                     $j++;
                 }
                 mkdir("../Admin/$choix/$groupe", 0700);
-                $retour = '<p style="color: #00FF00"> Le groupe a bien été créé ! </p>';
+                echo "<script>alert(\"Le groupe a bien été créé !\")</script>";
+                header('Refresh: 0.1;URL=classgroup_administrator.php');
             } else {
                 $retour = '<p style="color: #FF0000"> Veuillez renseigner une filière ! </p>';
             }

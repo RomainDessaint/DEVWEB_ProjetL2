@@ -21,13 +21,7 @@ echo display_header("Espace gestionnaires", "../styles/style_logpages.css");
 		<?php
 		echo formRepertoryCreator();
 
-		if(isset($_POST['submitArborescence'])) {
-			header('location: administrator_arborescence.php');
-		}
-		if (isset($_POST['submitFiliere']) && empty($_POST['submitGroupe'])){
-			echo repertoryCreator();
-		}
-		if (isset($_POST['submitGroupe']) && empty($_POST['submitFiliere'])){
+		if (isset($_POST['submitFiliere']) OR isset($_POST['submitGroupe'])) {
 			echo repertoryCreator();
 		}
 		?>
