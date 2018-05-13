@@ -17,6 +17,7 @@ function formChoiceStudent() {
     return $retour;
 }
 
+//Affichage d'un formulaire d'inscription étudiant
 function formRegisterStudent() {
     $retour =  '<h2> Inscrivez-vous : </h2>';
     $retour .= '<form action="#" method = "post">';
@@ -41,7 +42,7 @@ function formRegisterStudent() {
     return $retour;
 }
 
-//Authentification d'un étudiant
+//Fonction d'inscription pour un étudiant
 function registerStudent() {
     if(isset($_POST)) {
         if (isset($_POST['num']) AND isset($_POST['id']) AND $_POST['password1'] AND $_POST['password2']) {
@@ -117,7 +118,7 @@ function formLoginStudent() {
     return $retour;
 }
 
-//Authentification d'un étudiant
+//Fonction d'authentification d'un étudiant
 function loginStudent() {
     $error = "";
     if(isset($_POST)) {
@@ -149,7 +150,7 @@ function loginStudent() {
     return $error;
 }
 
-//Affichage d'un formulaire d'upload de photo
+//Affichage d'un formulaire de mise en ligne de photo
 function formUpload(){
     $retour = '<form method="post" enctype="multipart/form-data">';
     $retour .= '<table>';
@@ -169,6 +170,7 @@ function formUpload(){
     return $retour;
 }
 
+//Fonction de mise en ligne d'image par un étudiant
 function upload(){
     $retour = "";
     $end = null;
@@ -294,7 +296,7 @@ function formLoginAdministrator() {
     return $retour;
 }
 
-//Authentification d'un administrateur
+//Fonction d'authentification d'un administrateur
 function loginAdministrator() {
     $error = "";
     if(isset($_POST)) {
@@ -326,6 +328,7 @@ function loginAdministrator() {
     return $error;
 }
 
+//Affichage des possibilités de l'espace administrateur
 function formChoiceAdministrator() {
     $retour = '<table> <tr>';
     $retour .= '<form action="#" method="post">';
@@ -337,6 +340,83 @@ function formChoiceAdministrator() {
     $retour .= '<td> <input id="bouton" type="submit" value="OK" name="session"> </td>';
     $retour .= '</form> </tr> </table>';
 
+    return $retour;
+}
+
+//Fonction d'affichages des sessions
+function displaySessions() {
+    $retour = '<h2> Gérer les sessions d\'accès à la plateforme <h2>';
+    $retour .= '<table> <tr>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Nouvelle session : </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="newsession"> </td>';
+    $retour .= '</tr>';
+    $retour .= '</table>';
+    //Tableau des sessions administrateurs
+    $adminLignes = file("../ressources/private_administrator.csv");
+    $retour .= '<table class="content">';
+    $retour .= '<tr> <td colspan="5" style="text-align: center;"> Sessions administrateurs </td> </tr>';
+
+    if(fileSize("../ressources/private_administrator.csv") < 100) {
+        $retour .= '<tr> <td colspan="5" style="text-align: center;"> Aucune session administrateur </td> </tr>';
+    }
+    else {
+        $i = 0;
+        $retour .= '<tr> <th style="text-align: center;"> Nom </th>';
+        $retour .= '<th style="text-align: center;"> Prénom </th>';
+        $retour .= '<th style="text-align: center;"> Identifiant </th>';
+        $retour .= '<th colspan="2"> Options </th> </tr>';
+        foreach ($adminLignes as $adminLigne[]) {
+            $admintest = trim($adminLigne[$i]);
+            if(empty($admintest)) {
+                break;
+            }
+            else {
+                $adminContent = explode(',',$adminLigne[$i]);
+                $retour .= '<tr> <td style="text-align:center;">' .$adminContent[1] .'</td>';
+                $retour .= '<td style="text-align:center;">' .$adminContent[0] .'</td>';
+                $retour .= '<td style="text-align:center;">' .$adminContent[3] .'</td>';
+                $retour .= '<td style="text-align: center;"> <input id="bouton" type="submit" value="Modifier" name="modifyadmin'.$i.'"> </td>';
+                $retour .= '<td style="text-align: center;"> <input id="bouton" type="submit" value="Supprimer" name="deleteadmin'.$i.'"> </td>';
+                $retour .= '</tr>';
+                $i++;
+            }
+        }
+    }
+    $retour .= '</table>';
+
+    //Tableau des sessions professeurs/secretaires
+    $teacherLignes = file("../ressources/private_teacher.csv");
+    $retour .= '<table class="content">';
+    $retour .= '<tr> <td colspan="5" style="text-align: center;"> Sessions secretaires </td> </tr>';
+    if(fileSize("../ressources/private_teacher.csv") < 100) {
+        $retour .= '<tr> <td colspan="5" style="text-align: center;"> Aucune session secrétaire </td> </tr>';
+    }
+    else {
+        $j = 0;
+        $retour .= '<tr> <th style="text-align: center;"> Nom </th>';
+        $retour .= '<th style="text-align: center;"> Prénom </th>';
+        $retour .= '<th style="text-align: center;"> Identifiant </th>';
+        $retour .= '<th colspan="2"> Options </th> </tr>';
+        foreach ($teacherLignes as $teacherLigne[]) {
+            $teachertest = trim($teacherLigne[$j]);
+            if(empty($teachertest)) {
+                break;
+            }
+            else {
+                $teacherContent = explode(',',$teacherLigne[$j]);
+                $retour .= '<tr> <td style="text-align:center;">' .$adminContent[1] .'</td>';
+                $retour .= '<td style="text-align:center;">' .$adminContent[0] .'</td>';
+                $retour .= '<td style="text-align:center;">' .$teacherContent[3] .'</td>';
+                $retour .= '<td style="text-align: center;"> <input id="bouton" type="submit" value="Modifier" name="modifyadmin'.$i.'"> </td>';
+                $retour .= '<td style="text-align: center;"> <input id="bouton" type="submit" value="Supprimer" name="deleteadmin'.$i.'"> </td>';
+                $retour .= '</tr>';
+                $j++;
+            }
+        }
+    }
+    $retour .= '</form>';
+    $retour .= '</table>';
     return $retour;
 }
 
@@ -381,6 +461,7 @@ function formCreateLogin() {
     return $retour;
 }
 
+//Fonction de création de sessions
 function createLogin() {
     if(isset($_POST['createLogin'])) {
         $session = $_POST['session'];
@@ -410,10 +491,10 @@ function createLogin() {
                 $end,
             );
             if($session == 'teacher') {
-                $file = fopen("../ressources/login_teacher.csv","a");
+                $file = fopen("../ressources/private_teacher.csv","a");
             }
             elseif($session == 'administrator') {
-                $file = fopen("../ressources/login_administrator.csv","a");
+                $file = fopen("../ressources/private_administrator.csv","a");
             }
             fputcsv($file, $content);
             fclose($file);
@@ -426,6 +507,32 @@ function createLogin() {
     }
 }
 
+//Fonction permettant l'affichage de l'arborescence des filières et des groupes
+function displayFilieres() {
+    $retour = '<h2> Aperçu de l\'arborescense des filières </h2>';
+    $root = "Admin";
+    $filieres = directoryReading($root);
+    $retour .= '<table>';
+    $retour .= '<tr> <th> Filières </th> <th> </th> <th colspan="10" style="text-align: center;"> Groupes </th> </tr>';
+    if(count($filieres) > 0) {
+        for($i=0; $i<count($filieres); $i++) {
+            $retour .= '<tr> <td style="text-align: center;">' .$filieres[$i] .'</td>';
+            $groupe = $filieres[$i];
+            $groupes = directoryReading("Admin/$groupe");
+            $retour .= '<td> </td>';
+            if(count($groupes) > 0) {
+                for($j=0; $j<count($groupes); $j++) {
+                    $retour .= '<td>' .$groupes[$j] .'</td>';
+                }
+            }
+            $retour .= '</tr>';
+        }
+    }
+    $retour .= '</table>';
+    return $retour;
+}
+
+//Affichage d'un formulaire de création de filière ou de groupe
 function formRepertoryCreator() {
     $retour = '<table> <tr>';
     $retour .= '<form action="#" method="post">';
@@ -451,15 +558,14 @@ function formRepertoryCreator() {
     $retour .= '<td> <input id="bouton" type="text" value="" name="groupe"> </td>';
     $retour .= '<td> <input id="bouton" type="submit" value="OK" name="submitGroupe"> </td>';
     $retour .= '</tr>';
+    $retour .= '</form>';
     $retour .= '</table>';
 
     return $retour;
-
 }
 
 //Fonction permettant la création des filières
 function repertoryCreator(){
-
     $filiere = $_POST['filiere'];
     $groupe = $_POST['groupe'];
     $choix = $_POST['choix'];
@@ -519,23 +625,6 @@ function directoryReading($directory = "Admin"){
         return '<p style="color: #FF0000;"> Le dossier n\'existe pas !</p>';
     }
     return $dir;
-}
-
-function displayFilieres() {
-    $root = "Admin";
-    $filieres = directoryReading($root);
-    $retour = '<table>';
-    $retour .= '<tr> <th> Filières </th> <th> Groupes </th> </tr>';
-    for($i=0; $i<count($filieres); $i++) {
-        $retour .= '<tr> <td>' .$filieres[$i] .'</td> </tr>';
-        $groupe = $filieres[$i];
-        $groupes = directoryReading("Admin/$groupe");
-        for($i=0; $i<count($groupes); $i++) {
-            $retour .= '<tr> <td></td> <td>' .$groupes[$i] .'</td> </tr>';
-        }
-    }
-    $retour .= '</table>';
-    return $retour;
 }
 
 ?>

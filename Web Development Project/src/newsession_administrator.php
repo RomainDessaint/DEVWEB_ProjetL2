@@ -8,12 +8,7 @@ if(($_SESSION['logType']) != 3) {
   exit();
 }
 
-if(isset($_POST['newsession'])) {
-	header('location: newsession_administrator.php');
-	exit();
-}
-
-echo display_header("Espace gestionnaires", "../styles/style_sessionpages.css");
+echo display_header("Espace gestionnaires", "../styles/style_logpages.css");
 ?>
 
 <section>
@@ -24,7 +19,10 @@ echo display_header("Espace gestionnaires", "../styles/style_sessionpages.css");
 	<article>
 
 		<?php
-               echo displaySessions();
+               echo formCreateLogin();
+			if(isset($_POST['createLogin'])) {
+				echo createLogin();
+			}
 		?>
 
 	</article>
