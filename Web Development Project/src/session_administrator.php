@@ -13,12 +13,14 @@ if(isset($_POST['newsession'])) {
 	exit();
 }
 
-for($i=0; $i<5; $i++) {
+
+for($i=0; $i<countSession(1); $i++) {
 	if(isset($_POST['deleteadmin'.$i])) {
 		$temp = deleteSession($i, 1);
 	}
 }
-for($i=0; $i<3; $i++) {
+
+for($i=0; $i<countSession(2); $i++) {
 	if(isset($_POST['deleteteacher'.$i])) {
 		$temp = deleteSession($i, 2);
 	}
