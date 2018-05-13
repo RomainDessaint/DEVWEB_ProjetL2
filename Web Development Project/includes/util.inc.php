@@ -172,10 +172,10 @@ function formUpload(){
 function upload(){
     $retour = "";
     $end = null;
-// Varibles pour le prénom et le nom
+    // Varibles pour le prénom et le nom
     $firstname = $_POST['firstname'];
     $name = $_POST['name'];
-// Partie concernant l'image
+    // Partie concernant l'image
     $file = $_FILES['img'];
     $fileName = $_FILES['img']['name'];
     $fileTmpName = $_FILES['img']['tmp_name'];
@@ -198,9 +198,9 @@ function upload(){
                         'img'	=>	$fileNameNew,
                         $end,
                     );
-                        $file = fopen("../ressources/info_student.csv","a");
-                        fputcsv($file, $content);
-                        fclose($file);
+                    $file = fopen("../ressources/info_student.csv","a");
+                    fputcsv($file, $content);
+                    fclose($file);
                     // Fin de la Partie concernant le nom et le prénom
                     move_uploaded_file($fileTmpName, $fileDestination);
                     $retour = "Upload réussi !";
@@ -211,7 +211,7 @@ function upload(){
                 $retour = "Une erreur est apparue lors de l'upload de votre image !";
             }
         } else {
-                $retour = "Vous ne pouvez pas upload des fichiers de ce type !";
+            $retour = "Vous ne pouvez pas upload des fichiers de ce type !";
         }
     } else {
         $retour = "Veuillez renseignez un nom, un prénom, ainsi qu'une image !";
@@ -429,20 +429,23 @@ function createLogin() {
 function formRepertoryCreator() {
     $retour = '<table> <tr>';
     $retour .= '<form action="#" method="post">';
+    $retour .= '<td> Afficher l\'arborescense des filières : </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="submitArborescence"> </td>';
+    $retour .= '</tr> <tr>';
     $retour .= '<td> Créez une filière : </td>';
     $retour .= '<td> <input id="bouton" type="text" value="" name="filiere"> </td>';
-    $retour .= '<td colspan="3" style="text-align: left;"> <input id="bouton" type="submit" value="OK" name="submitFiliere"> </td>';
+    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="submitFiliere"> </td>';
     $retour .= '</tr> <tr>';
     $retour .= '<td> Selectionnez une filière : </td>';
     $retour .= '<td> <select id="bouton" name="choix">';
     $retour .= '<option value="" selected="selected"> Aucune </option>';
-        $dir = directoryReading();
-        $i = 0;
-        foreach ($dir as $directories[$i]) {
-            $retour .= '<option value="'.$directories[$i].'">'.$directories[$i].'</option>';
-            $i++;
-        }
-	$retour .= '</select> </td> </tr>';
+    $dir = directoryReading();
+    $i = 0;
+    foreach ($dir as $directories[$i]) {
+        $retour .= '<option value="'.$directories[$i].'">'.$directories[$i].'</option>';
+        $i++;
+    }
+    $retour .= '</select> </td> </tr>';
     $retour .= '<tr>';
     $retour .= '<td> Créez un groupe : </td>';
     $retour .= '<td> <input id="bouton" type="text" value="" name="groupe"> </td>';
@@ -516,6 +519,23 @@ function directoryReading($directory = "Admin"){
         return '<p style="color: #FF0000;"> Le dossier n\'existe pas !</p>';
     }
     return $dir;
+}
+
+function displayFilieres() {
+    $root = "Admin";
+    $filieres = directoryReading($root);
+    $retour = '<table>';
+    $retour .= '<tr> <th> Filières </th> <th> Groupes </th> </tr>';
+    for($i=0; $i<count($filieres); $i++) {
+        $retour .= '<tr> <td>' .$filieres[$i] .'</td> </tr>';
+        $groupe = $filieres[$i];
+        $groupes = directoryReading("Admin/$groupe");
+        for($i=0; $i<count($groupes); $i++) {
+            $retour .= '<tr> <td></td> <td>' .$groupes[$i] .'</td> </tr>';
+        }
+    }
+    $retour .= '</table>';
+    return $retour;
 }
 
 ?>
