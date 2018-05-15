@@ -15,6 +15,10 @@ echo display_header("Inscription Etudiants", "../styles/style_logpages.css");
 	<article>
 		<?php
 		echo formRegisterStudent();
+		if (isset($_POST['retour'])) {
+			header("location: login_student.php");
+		}
+
 		if(isset($_POST['register'])) {
 			echo registerStudent();
 		}

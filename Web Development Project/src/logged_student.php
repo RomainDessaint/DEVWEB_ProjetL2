@@ -19,6 +19,10 @@ echo display_header("Espace Etudiants", "../styles/style_logpages.css");
      <article>
           <?php
               echo formUpload();
+              echo btnRetour();
+              if (isset($_POST['retour'])) {
+                  header("location: login_student.php");
+              }
           ?>
               <script type="text/javascript">
               var rules = {a:"àáâãäå",
@@ -71,8 +75,11 @@ echo display_header("Espace Etudiants", "../styles/style_logpages.css");
               </script>
           <?php
               if (isset($_POST['submit'])) {
-              echo upload();
-          }
+                  echo upload();
+              }
+
+
+
           ?>
      </article>
 </section>

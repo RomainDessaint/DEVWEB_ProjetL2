@@ -3,7 +3,7 @@
 function display_header($title, $stylesheet) {
 	$header =
 	'<!DOCTYPE html>
-	<html>
+	<html lang="fr">
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<link rel="stylesheet" type="text/css" href="' .$stylesheet .'"/>
@@ -42,7 +42,7 @@ function display_footer($type = "up") {
 function display_titleLog($title = "Espace ?") {
 	$retour = "<table id = 'titleLog'> <tr>";
 	$retour .= "<td> <table id = 'title'>";
-	$retour .= "<tr> <td> <h1> $title </h1> </td> </tr>";
+	$retour .= "<tr> <th class='titre_espace'> $title </th> </tr>";
 	$retour .= "</table> </td>";
 	$retour .= "<td> <table id = 'info'>";
 	if(isset($_SESSION['connected'])) {

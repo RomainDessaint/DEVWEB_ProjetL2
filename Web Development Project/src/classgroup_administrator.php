@@ -16,13 +16,32 @@ echo display_header("Espace gestionnaires", "../styles/style_logpages.css");
 	echo display_titleLog("Espace Gestionnaires");
 	?>
 
-	<article>
-
+	<h2> Organisation des groupes de TD </h2>
+	<article style="width:49%; float:left; min-height: 350px;">
 		<?php
 		echo formRepertoryCreator();
 
-		if (isset($_POST['submitFiliere']) OR isset($_POST['submitGroupe'])) {
+		if (isset($_POST['submitFiliere']) OR isset($_POST['submitGroupe']) && !isset($_POST['submit'])) {
 			echo repertoryCreator();
+		}
+		?>
+	</article>
+	<article style="width:49%; float: right; min-height: 350px; max-height:350px;">
+		<?php
+			echo formRepertoryRemoval();
+
+		if (isset($_POST['submit'])) {
+			echo repertoryRemoval();
+		}
+		?>
+	</article>
+	<article>
+		<?php
+		echo displayFilieres();
+
+		echo btnRetour();
+		if (isset($_POST['retour'])) {
+			header("location: choice_administrator.php");
 		}
 		?>
 

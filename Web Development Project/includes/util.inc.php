@@ -7,11 +7,11 @@ function formChoiceStudent() {
     $retour = '<table> <tr>';
     $retour .= '<form action="#" method="post">';
     $retour .= '<td> Première connexion ? </td>';
-    $retour .= '<td> <input id="bouton" type="submit" value="S\'inscrire" name="register"> </td>';
+    $retour .= '<td> <input class="bouton" type="submit" value="S\'inscrire" name="register"> </td>';
     $retour .= ' </form> </tr> <tr>';
     $retour .= '<form action="#" method="post">';
     $retour .= '<td> Déja inscrit ? </td>';
-    $retour .= '<td> <input id="bouton" type="submit" value="Se connecter" name="signin"> </td>';
+    $retour .= '<td> <input class="bouton" type="submit" value="Se connecter" name="signin"> </td>';
     $retour .= '</form> </tr> </table>';
 
     return $retour;
@@ -34,9 +34,12 @@ function formRegisterStudent() {
     $retour .= '</tr> <tr>';
     $retour .= '<td> <label> Confirmer le mot de passe : </label> </td>';
     $retour .= '<td> <input type="password" name="password2" value=""> </td>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td colspan=2> <input class="bouton" type="submit" value="S\'inscrire" name="register"> </td>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td colspan=2> Déjà inscrit? <a href="login_student.php" style="font-weight:bold;"> Connectez-vous ici ! </a> </td>';
     $retour .= '</tr>';
     $retour .= '</table>';
-    $retour .= '<input id="bouton" type="submit" value="Valider" name="register">';
     $retour .= '</form>';
 
     return $retour;
@@ -100,9 +103,12 @@ function formLoginStudent() {
     $retour .= '</tr> <tr>';
     $retour .= '<td> <label> Mot de passe : </label> </td>';
     $retour .= '<td> <input type="password" name="password" value=""> </td>';
-    $retour .= '</tr>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td colspan=2> <input class="bouton" type="submit" value="Se connecter" name="login"> </td>';
+    $retour .= '</tr> <tr>';
+    $retour .= '<td colspan=2> Pas encore inscrit ? <a href="register_student.php" style="font-weight:bold;"> Inscrivez-vous ici ! </a> </td>';
     $retour .= '</table>';
-    $retour .= '<input id="bouton" type="submit" value="Valider" name="login">';
+
     $retour .= '</form>';
 
     return $retour;
@@ -181,23 +187,24 @@ function formUpload(){
         $dir2 = directoryReading("Admin/$listChoice");
         $j = 0;
         foreach ($dir2 as $directories[$j]) {
-            $retour .= '<option value="'.$directories[$j].'">'.$directories[$j].'</option>';
-            $j++;
+            if($directories[$j] != null){
+                $retour .= '<option value="'.$directories[$j].'">'.$directories[$j].'</option>';
+                $j++;
+            }
         }
     }
 
     $retour .= '</select>';
     $retour .= '</tr>';
     $retour .= '<tr>';
-    $retour .= '<td> <label> Prénom : </label> </td>';
+    $retour .= '<td style="text-align: right; padding-right: 70px;"> <label> Prénom : </label> </td>';
     $retour .= '<td> <input type="text" name="firstname" value=""> </td>';
     $retour .= '</tr> <tr>';
-    $retour .= '<td> <label> Nom : </label> </td>';
+    $retour .= '<td  style="text-align: right; padding-right: 70px;"> <label> Nom : </label> </td>';
     $retour .= '<td> <input type="text" name="name" value=""> </td>';
     $retour .= '</tr> <tr>';
-    $retour .= '<td colspan="2"> <input id="real-file" hidden="hidden" type="file" name="img" /> <button type="button" id="custom-button">Choisir une image</button> <span id="custom-text">Aucune image choisie.</span></td>';
-    $retour .= '</tr> <tr>';
-    $retour .= '<td colspan=2> <input id="bouton" type="submit" value="Valider" name="submit"> </td>';
+    $retour .= '<td> <input id="real-file" hidden="hidden" type="file" name="img" /> <button type="button" id="custom-button">Choisir une image</button> <span id="custom-text">Aucune image choisie.</span></td>';
+    $retour .= '<td> <input class="bouton" type="submit" value="Valider" name="submit"> </td>';
     $retour .= '</tr>';
     $retour .= '</table>';
     $retour .= '</form>';
@@ -220,7 +227,14 @@ function upload(){
     $fileExt = explode('.', $fileName);
     $fileActualExt = strtolower(end($fileExt));
     $allowed = array('jpg', 'jpeg', 'png');
+
     if (($firstname != null) AND ($name != null) AND ($fileName != null)) {
+
+        $retour = specialCaracters($firstname);
+        if ($retour != "") {
+            return $retour;
+        }
+
         if (in_array($fileActualExt, $allowed)) {
             if ($fileError === 0) {
                 if ($fileSize < 1000000) {
@@ -270,7 +284,7 @@ function formLoginTeacher() {
     $retour .= '<td> <input type="password" name="password" value=""> </td>';
     $retour .= '</tr>';
     $retour .= '</table>';
-    $retour .= '<input id="bouton" type="submit" value="Valider" name="login">';
+    $retour .= '<input class="bouton" type="submit" value="Valider" name="login">';
     $retour .= '</form>';
 
     return $retour;
@@ -323,7 +337,7 @@ function formLoginAdministrator() {
     $retour .= '<td> <input type="password" name="password" value=""> </td>';
     $retour .= '</tr>';
     $retour .= '</table>';
-    $retour .= '<input id="bouton" type="submit" value="Valider" name="login">';
+    $retour .= '<input class="bouton" type="submit" value="Valider" name="login">';
     $retour .= '</form>';
 
     return $retour;
@@ -366,11 +380,11 @@ function formChoiceAdministrator() {
     $retour = '<table> <tr>';
     $retour .= '<form action="#" method="post">';
     $retour .= '<td> Gérer les filières : </td>';
-    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="group"> </td>';
+    $retour .= '<td> <input class="bouton" type="submit" value="OK" name="group"> </td>';
     $retour .= ' </form> </tr> <tr>';
     $retour .= '<form action="#" method="post">';
     $retour .= '<td> Gérer les sessions : </td>';
-    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="session"> </td>';
+    $retour .= '<td> <input class="bouton" type="submit" value="OK" name="session"> </td>';
     $retour .= '</form> </tr> </table>';
 
     return $retour;
@@ -379,10 +393,11 @@ function formChoiceAdministrator() {
 //Fonction d'affichages des sessions
 function displaySessions() {
     $retour = '<h2> Gérer les sessions d\'accès à la plateforme <h2>';
-    $retour .= '<table> <tr>';
+    $retour .= '<table>';
     $retour .= '<form action="#" method="post">';
+    $retour .= '<tr>';
     $retour .= '<td> Nouvelle session : </td>';
-    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="newsession"> </td>';
+    $retour .= '<td> <input class="bouton" type="submit" value="OK" name="newsession"> </td>';
     $retour .= '</tr>';
     $retour .= '</table>';
     //Tableau des sessions administrateurs
@@ -409,8 +424,8 @@ function displaySessions() {
                 $retour .= '<tr> <td style="text-align:center;">' .$adminContent[1] .'</td>';
                 $retour .= '<td style="text-align:center;">' .$adminContent[0] .'</td>';
                 $retour .= '<td style="text-align:center;">' .$adminContent[3] .'</td>';
-                $retour .= '<td style="text-align: center;"> <input id="bouton" type="submit" value="Modifier" name="modifyadmin'.$i.'"> </td>';
-                $retour .= '<td style="text-align: center;"> <input id="bouton" type="submit" value="Supprimer" name="deleteadmin'.$i.'"> </td>';
+                $retour .= '<td style="text-align: center;"> <input class="bouton" type="submit" value="Modifier" name="modifyadmin'.$i.'"> </td>';
+                $retour .= '<td style="text-align: center;"> <input class="bouton" type="submit" value="Supprimer" name="deleteadmin'.$i.'"> </td>';
                 $retour .= '</tr>';
                 $i++;
             }
@@ -441,8 +456,8 @@ function displaySessions() {
                 $retour .= '<tr> <td style="text-align:center;">' .$teacherContent[1] .'</td>';
                 $retour .= '<td style="text-align:center;">' .$teacherContent[0] .'</td>';
                 $retour .= '<td style="text-align:center;">' .$teacherContent[3] .'</td>';
-                $retour .= '<td style="text-align: center;"> <input id="bouton" type="submit" value="Modifier" name="modifyteacher'.$j.'"> </td>';
-                $retour .= '<td style="text-align: center;"> <input id="bouton" type="submit" value="Supprimer" name="deleteteacher'.$j.'"> </td>';
+                $retour .= '<td style="text-align: center;"> <input class="bouton" type="submit" value="Modifier" name="modifyteacher'.$j.'"> </td>';
+                $retour .= '<td style="text-align: center;"> <input class="bouton" type="submit" value="Supprimer" name="deleteteacher'.$j.'"> </td>';
                 $retour .= '</tr>';
                 $j++;
             }
@@ -488,7 +503,7 @@ function formCreateLogin() {
     $retour .= '<td> <input type="password" name="password2" value=""> </td>';
     $retour .= '</tr>';
     $retour .= '</table>';
-    $retour .= '<input id="bouton" type="submit" value="Valider" name="createLogin">';
+    $retour .= '<input class="bouton" type="submit" value="Valider" name="createLogin">';
     $retour .= '</form>';
 
     return $retour;
@@ -607,20 +622,21 @@ function deleteSession($session, $sessionType) {
 //Fonction permettant l'affichage de l'arborescence des filières et des groupes
 function displayFilieres() {
     $retour = '<h2> Aperçu des filières et des groupes </h2>';
-    $root = "Admin";
+    $root = "admin";
     $filieres = directoryReading($root);
     $retour .= '<table>';
-    $retour .= '<tr> <th> Filières </th> <th> </th> <th colspan="10" style="text-align: center;"> Groupes </th> </tr>';
+    $retour .= '<tr> <th style="padding-right: 30px;"> Filières </th> <th style="padding-left: 30px;"> Groupes </th> </tr>';
     if(count($filieres) > 0) {
         for($i=0; $i<count($filieres); $i++) {
-            $retour .= '<tr> <td style="text-align: center;">' .$filieres[$i] .'</td>';
+            $retour .= '<tr> <td style="text-align: center; padding-right: 30px;"> ' .$filieres[$i] .' </td>';
             $groupe = $filieres[$i];
             $groupes = directoryReading("Admin/$groupe");
-            $retour .= '<td> </td>';
             if(count($groupes) > 0) {
+                $retour .= '<td style="padding-left: 30px;"> <table> <tr>';
                 for($j=0; $j<count($groupes); $j++) {
-                    $retour .= '<td>' .$groupes[$j] .'</td>';
+                    $retour .= '<td> ' .$groupes[$j].' </td>';
                 }
+                $retour .= '</tr> </table> </td>';
             }
             $retour .= '</tr>';
         }
@@ -631,15 +647,16 @@ function displayFilieres() {
 
 //Affichage d'un formulaire de création de filière ou de groupe
 function formRepertoryCreator() {
-    $retour = '<h2> Organisation des groupes de TD </h2>';
-    $retour .= '<table> <tr>';
+    $retour = '<h3 style="padding:20px;"> Création des filières et des groupes </h3>';
     $retour .= '<form action="#" method="post">';
+    $retour .= '<table>';
+    $retour .= '<tr>';
     $retour .= '<td> Créez une filière : </td>';
-    $retour .= '<td> <input id="bouton" type="text" value="" name="filiere"> </td>';
-    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="submitFiliere"> </td>';
+    $retour .= '<td> <input class="bouton" type="text" value="" name="filiere"> </td>';
+    $retour .= '<td> <input class="bouton" type="submit" value="OK" name="submitFiliere"> </td>';
     $retour .= '</tr> <tr>';
     $retour .= '<td> Selectionnez une filière : </td>';
-    $retour .= '<td> <select id="bouton" name="choix">';
+    $retour .= '<td colspan=2 style="text-align:left;"> <select name="choix">';
     $retour .= '<option value="" selected="selected"> Aucune </option>';
     $dir = directoryReading();
     $i = 0;
@@ -651,38 +668,120 @@ function formRepertoryCreator() {
     $retour .= '</select> </td> </tr>';
     $retour .= '<tr>';
     $retour .= '<td> Créez un groupe : </td>';
-    $retour .= '<td> <input id="bouton" type="text" value="" name="groupe"> </td>';
-    $retour .= '<td> <input id="bouton" type="submit" value="OK" name="submitGroupe"> </td>';
+    $retour .= '<td> <input class="bouton" type="text" value="" name="groupe"> </td>';
+    $retour .= '<td> <input class="bouton" type="submit" value="OK" name="submitGroupe"> </td>';
     $retour .= '</tr>';
-    $retour .= '</form>';
     $retour .= '</table>';
-
-    $retour .= displayFilieres();
+    $retour .= '</form>';
 
     return $retour;
+}
+
+function formRepertoryRemoval() {
+    $retour = '<h3 style="padding:20px;"> Suppression des filières et des groupes </h3>';
+    $retour .= '<form action="#" method="post">';
+    $retour .= '<table style="padding: 50px 0 50px 0;">';
+    $retour .= '<tr>';
+    $retour .= '<td> <select name="choixFilieres" id="list" onchange="getSelectValue();">';
+    $retour .= '<option value=""> Choisissez une filière </option>';
+
+    $dir = directoryReading();
+    $i = 0;
+    foreach ($dir as $directories[$i]) {
+        $retour .= '<option ';
+        if(isset($_GET["filiere"]) && $_GET["filiere"] == $directories[$i] && !isset($_POST['submit'])){
+            $retour .= 'selected="selected" ';
+        }
+        $retour .= 'value="'.$directories[$i].'">'.$directories[$i].'</option>';
+        $i++;
+    }
+
+    $retour .= '</select> </td>';
+
+    $retour .= '<script>
+
+    function getSelectValue(){
+        var selectedValue = document.getElementById("list").value;
+        window.location.href="classgroup_administrator.php?filiere="+selectedValue;
+    }
+
+    </script>';
+
+    $retour .= '<td> <select name="choixGroupes">';
+    $retour .= '<option value=""> Choisissez un groupe </option>';
+
+    if(isset($_GET["filiere"])){
+        $listChoice = $_GET["filiere"];
+        $listChoice = str_replace("#", "", $listChoice);
+        $dir2 = directoryReading("Admin/$listChoice");
+        $j = 0;
+        if(is_array($dir2)){
+            foreach ($dir2 as $directories[$j]) {
+                if($directories[$j] != null){
+                    $retour .= '<option value="'.$directories[$j].'">'.$directories[$j].'</option>';
+                    $j++;
+                }
+            }
+        } else {
+            echo '<script> alert("La filière renseignée n\'existe pas !"); </script>';
+        }
+    }
+    $retour .= '</select> </td> </tr>';
+    $retour .= '<tr>';
+    $retour .= '<td colspan=2> <input class="bouton" type="submit" value="Supprimer" name="submit"> </td>';
+    $retour .= '</tr>';
+    $retour .= '</table>';
+    $retour .= '</form>';
+
+    return $retour;
+}
+
+function repertoryRemoval() {
+    $choixFiliere = $_POST['choixFilieres'];
+    $choixGroupe = $_POST['choixGroupes'];
+    $retour = "";
+
+    if ($choixFiliere != "" && $choixGroupe == "") {
+        if (!is_dir("../admin/$choixFiliere")) {
+            $retour = '<p style="color: #FF0000;"> La suppresion de la filière '.$choixFiliere.' a rencontré un problème ! </p>';
+        } else {
+            rrmdir("../admin/$choixFiliere");
+            echo '<script> alert("La suppression de la filère '.$choixFiliere.' a été un succès !"); </script>';
+            header("Refresh: 0.1:URL=classgroup_administrator.php");
+        }
+    } elseif ($choixFiliere != "" && $choixGroupe != "") {
+        if (!is_dir("../admin/$choixFiliere")) {
+            $retour = '<p style="color: #FF0000;"> La suppression du groupe '.$choixGroupe.' de la filière '.$choixFiliere.' a rencontré un problème ! </p>';
+        } else {
+            rrmdir("../admin/$choixFiliere/$choixGroupe");
+            echo '<script> alert("La suppression du groupe '.$choixGroupe.' de la filière '.$choixFiliere.' a été un succès !"); </script>';
+            header("Refresh: 0.1:URL=classgroup_administrator.php");
+        }
+    } else {
+        $retour = '<p style="color: #FF0000;"> Veuillez renseigner une filière ! </p>';
+    }
+
+    return $retour;
+
+
 }
 
 //Fonction permettant la création des filières
 function repertoryCreator(){
     $filiere = $_POST['filiere'];
+    $filiere = strtoupper($filiere);
+
     $groupe = $_POST['groupe'];
+    $groupe = strtoupper($groupe);
     $choix = $_POST['choix'];
     $retour = "";
-    $i = 0;
     $j = 0;
-    $not_allowed = array("\\", "/", ":", "*", "?", "\"", ">", "<", "|", ".");
-    $count = count($not_allowed);
     if (isset($_POST['submitFiliere']) && empty($_POST['submitGroupe'])) {
         if ($filiere != ""){
-            for($i; $i<$count; $i++){
-                $pos = strpos($filiere, $not_allowed[$i]);
-                if ($pos !== false) {
-                    $retour = '<p style="color: #FF0000;"> Veuillez utiliser des caractères autres que :';
-                    foreach ($not_allowed as $print) {
-                        $retour .= " $print";
-                    }
-                    return $retour;
-                }
+
+            $retour = specialCaracters($filiere);
+            if ($retour != "") {
+                return $retour;
             }
 
             $dir = directoryReading();
@@ -701,18 +800,12 @@ function repertoryCreator(){
     }
 
 
-    if (isset($_POST['submitGroupe']) && empty($_POST['submitFiliere']) && isset($_POST['choix'])) {
+    if (isset($_POST['submitGroupe']) && empty($_POST['submitFiliere'])) {
         if ($groupe != ""){
             if($choix != ""){
-                for($i; $i<$count; $i++){
-                    $pos = strpos($filiere, $not_allowed[$i]);
-                    if ($pos !== false) {
-                        $retour = '<p style="color: #FF0000;"> Veuillez utiliser des caractères autres que :';
-                        foreach ($not_allowed as $print) {
-                            $retour .= " $print";
-                        }
-                        return $retour;
-                    }
+                $retour = specialCaracters($groupe);
+                if ($retour != "") {
+                    return $retour;
                 }
                 $dir = directoryReading("Admin/$choix");
                 foreach ($dir as $directories[]) {
@@ -735,20 +828,65 @@ function repertoryCreator(){
 }
 
 // Fonction permettant la lecture des dossiers
-function directoryReading($directory = "Admin"){
+function directoryReading($directory = "admin"){
     $nb_fichier = 0;
     $dir[] = "";
-    if ($dossier = opendir("../$directory")) {
-        while (false !== ($fichier = readdir($dossier))) {
-            if($fichier != '.' && $fichier != '..'){
-                $dir[$nb_fichier] = $fichier;
-                $nb_fichier ++;
+    if (false != is_dir("../$directory")) {
+        if($dossier = opendir("../$directory")){
+            while (false !== ($fichier = readdir($dossier))) {
+                if($fichier != '.' && $fichier != '..'){
+                    $dir[$nb_fichier] = $fichier;
+                    $nb_fichier ++;
+                }
             }
+        } else {
+            return '<p style="color: #FF0000;"> Le dossier spécifié est introuvable ! </p>';
         }
     } else {
-        return '<p style="color: #FF0000;"> Le dossier n\'existe pas !</p>';
+        return '<p style="color: #FF0000;"> Le dossier spécifié est introuvable ! </p>';
     }
     return $dir;
+}
+
+// Bouton de retour
+function btnRetour($message = "Retour"){
+    $retour = '<form method="post">';
+    $retour .= '<input class="retour" type="submit" value="'.$message.'" name="retour" />';
+    $retour .= '</form>';
+
+    return $retour;
+}
+
+function specialCaracters($string){
+    $not_allowed = array("\\", "/", ":", "*", "?", "\"", ">", "<", "|", ".");
+    $count = count($not_allowed);
+
+    $retour = "";
+
+    for($i = 0; $i<$count; $i++){
+        $pos = strpos($string, $not_allowed[$i]);
+        if ($pos !== false) {
+            $retour = '<p style="color: #FF0000;"> Veuillez utiliser des caractères autres que :';
+            foreach ($not_allowed as $print) {
+                $retour .= " $print";
+            }
+            $retour .= '</p>';
+        }
+    }
+    return $retour;
+}
+
+function rrmdir($dir) {
+  if (is_dir($dir)) {
+    $objects = scandir($dir);
+    foreach ($objects as $object) {
+      if ($object != "." && $object != "..") {
+        if (filetype($dir."/".$object) == "dir") rrmdir($dir."/".$object); else unlink($dir."/".$object);
+      }
+    }
+    reset($objects);
+    rmdir($dir);
+  }
 }
 
 ?>

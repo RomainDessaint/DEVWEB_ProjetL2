@@ -38,6 +38,12 @@ echo display_header("Espace gestionnaires", "../styles/style_sessionpages.css");
 
 		<?php
 		echo displaySessions();
+		
+		echo btnRetour();
+		if (isset($_POST['retour'])) {
+			header("location: choice_administrator.php");
+		}
+
 		if(isset($temp)) {
 			echo $temp;
 		}
