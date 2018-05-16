@@ -16,8 +16,8 @@ echo display_header("Espace gestionnaires", "../styles/style_logpages.css");
 	echo display_titleLog("Espace Gestionnaires");
 	?>
 
-	<h2> Organisation des groupes de TD </h2>
-	<article style="width:49%; float:left; min-height: 350px;">
+	<h2 id="orga"> Organisation des groupes de TD </h2>
+	<article style="width:49%; float:left; min-height: 370px;">
 		<?php
 		echo formRepertoryCreator();
 
@@ -26,7 +26,7 @@ echo display_header("Espace gestionnaires", "../styles/style_logpages.css");
 		}
 		?>
 	</article>
-	<article style="width:49%; float: right; min-height: 350px; max-height:350px;">
+	<article style="width:49%; float: right; min-height: 370px; max-height:350px;">
 		<?php
 			echo formRepertoryRemoval();
 

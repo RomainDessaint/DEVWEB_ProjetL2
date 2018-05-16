@@ -154,7 +154,7 @@ function formUpload(){
     $retour .= '<th> Filières </th>';
     $retour .= '<th> Groupes </th>';
     $retour .= '</tr> <tr>';
-    $retour .= '<td> <select id="list" onchange="getSelectValue();">';
+    $retour .= '<td> <select name="selectFilieres" id="list" onchange="getSelectValue();">';
     $retour .= '<option value="" selected="selected"> Choisissez une filière </option>';
 
     $dir = directoryReading();
@@ -214,9 +214,11 @@ function formUpload(){
 function upload(){
     $retour = "";
     $end = null;
-    // Varibles pour le prénom et le nom
+    // Varibles pour le prénom, le nom, la filière et le groupe de l'étudiant
     $firstname = $_POST['firstname'];
     $name = $_POST['name'];
+    $filiere = $_POST['selectFilieres'];
+    $groupe = $_POST['selectGroupes'];
     // Partie concernant l'image
     $file = $_FILES['img'];
     $fileName = $_FILES['img']['name'];
@@ -228,7 +230,7 @@ function upload(){
     $fileActualExt = strtolower(end($fileExt));
     $allowed = array('jpg', 'jpeg', 'png');
 
-    if (($firstname != null) AND ($name != null) AND ($fileName != null)) {
+    if (($firstname != null) AND ($name != null) AND ($fileName != null) AND ($filiere != null) AND ($groupe != null)) {
 
         $retour = specialCaracters($firstname);
         if ($retour != "") {
@@ -244,6 +246,8 @@ function upload(){
                     $content = array(
                         'firstname'	=>	$firstname,
                         'name'		=>	$name,
+                        'filiere'   =>  $filiere,
+                        'groupe'    =>  $groupe,
                         'img'		=>	$fileNameNew,
                         $end,
                     );
@@ -263,7 +267,7 @@ function upload(){
             $retour = "Vous ne pouvez pas upload des fichiers de ce type !";
         }
     } else {
-        $retour = "Veuillez renseignez un nom, un prénom, ainsi qu'une image !";
+        $retour = "<p style='color: #FF0000;'>Veuillez renseigner tous les champs !";
     }
     // Fin de la partie concernant l'image
     return $retour;
@@ -682,6 +686,7 @@ function formRepertoryRemoval() {
     $retour .= '<form action="#" method="post">';
     $retour .= '<table style="padding: 50px 0 50px 0;">';
     $retour .= '<tr>';
+    $retour .= '<td> Supprimer une filière : </td>';
     $retour .= '<td> <select name="choixFilieres" id="list" onchange="getSelectValue();">';
     $retour .= '<option value=""> Choisissez une filière </option>';
 
@@ -702,17 +707,20 @@ function formRepertoryRemoval() {
 
     function getSelectValue(){
         var selectedValue = document.getElementById("list").value;
-        window.location.href="classgroup_administrator.php?filiere="+selectedValue;
+        window.location.href="classgroup_administrator.php?filiere="+selectedValue+"#orga";
     }
 
     </script>';
 
+    $retour .= '</tr> <tr>';
+    $retour .= '<td> Ou un groupe de celle-ci : </td>';
     $retour .= '<td> <select name="choixGroupes">';
     $retour .= '<option value=""> Choisissez un groupe </option>';
 
     if(isset($_GET["filiere"])){
         $listChoice = $_GET["filiere"];
         $listChoice = str_replace("#", "", $listChoice);
+        $listChoice = str_replace("orga", "", $listChoice);
         $dir2 = directoryReading("Admin/$listChoice");
         $j = 0;
         if(is_array($dir2)){
@@ -747,7 +755,7 @@ function repertoryRemoval() {
         } else {
             rrmdir("../admin/$choixFiliere");
             echo '<script> alert("La suppression de la filère '.$choixFiliere.' a été un succès !"); </script>';
-            header("Refresh: 0.1:URL=classgroup_administrator.php");
+            header('Refresh: 0.1;URL=classgroup_administrator.php');
         }
     } elseif ($choixFiliere != "" && $choixGroupe != "") {
         if (!is_dir("../admin/$choixFiliere")) {
@@ -755,7 +763,7 @@ function repertoryRemoval() {
         } else {
             rrmdir("../admin/$choixFiliere/$choixGroupe");
             echo '<script> alert("La suppression du groupe '.$choixGroupe.' de la filière '.$choixFiliere.' a été un succès !"); </script>';
-            header("Refresh: 0.1:URL=classgroup_administrator.php");
+            header('Refresh: 0.1;URL=classgroup_administrator.php');
         }
     } else {
         $retour = '<p style="color: #FF0000;"> Veuillez renseigner une filière ! </p>';
